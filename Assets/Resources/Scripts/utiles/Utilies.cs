@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class utilies : MonoBehaviour
 {
@@ -33,9 +36,27 @@ public class utilies : MonoBehaviour
 
         return point;
     }
- 
+
     public static Color HexToColor(string hex)
     {
         return ColorUtility.TryParseHtmlString(hex, out var newCol) ? newCol : Color.black;
+    }
+
+    public static string NumberToFormattedString(BigInteger num)
+    {
+        var root = new[] {"", "K", "M", "B", "T", "q", "Q", "s", "S", "O", "N", "d", "U", "D"};
+        var pattern = num.ToString("N0");
+        var commas = pattern.Split('.');
+        if (commas.Length <= 2)
+            return num.ToString("N0");
+        return commas[0] + "," + commas[1] + " " + root[commas.Length - 1];
+    }
+
+    public static string DoubleToFormattedString(double num)
+    {
+        if (num < 1000)
+            return num.ToString();
+        else
+            return NumberToFormattedString(new BigInteger(num));
     }
 }

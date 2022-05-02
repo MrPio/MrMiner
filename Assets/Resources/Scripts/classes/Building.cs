@@ -5,30 +5,31 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
-public class Building:MonoBehaviour
+[Serializable]
+public class Building
 {
     public string Name { get; }
     public BigInteger BaseCost { get; }
     public string ColorHex { get; }
-    public float BasePS { get; }
-    public Sprite Logo { get; }
+    public double BaseLps { get; }
+    public string Logo { get; }
 
     public int Version { get; private set; }
     public int Count { get; private set; }
     public BigInteger CurrentCost { get; private set; }
-    public Color Color { get; private set; }
+    public string Color { get; private set; }
 
-    public Building(string name, BigInteger baseCost, string colorHex, float basePS, string logo)
+    public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo)
     {
         Name = name;
         BaseCost = baseCost;
         ColorHex = colorHex;
-        BasePS = basePS;
-        Logo = Resources.Load<Sprite>(logo);
-        Version = 1;
+        BaseLps = baseLps;
+        Logo = logo;
+        Version = 0;
         Count = 0;
         SetCurrentCost();
-        Color = utilies.HexToColor(colorHex);
+        Color = colorHex;
     }
 
     public void Upgrade()
@@ -47,20 +48,37 @@ public class Building:MonoBehaviour
         CurrentCost = BigInteger.Multiply(BaseCost, new BigInteger(Math.Pow(1.15f, Count)));
     }
 
-    public GameObject InstantiateGameObject(Transform parent)
+    public double CalculateLps()
     {
-        var building = Instantiate(Resources.Load<GameObject>("Prefabs/ShopItem"), parent, false);
+        var lps = BaseLps * Count;
+        lps *= Mathf.Pow(2, Version);
+        return lps;
+    }
+
+    public GameObject InstantiateGameObject(GameObject building)
+    {
+        var logo = Resources.Load<Sprite>(Logo);
 
         var shopBase = building.transform.Find("ShopItem_base").gameObject;
-        shopBase.GetComponent<Image>().color = Color;
+        shopBase.GetComponent<Image>().color = utilies.HexToColor(Color);
+        if (Color == "#545454")
+        {
+            shopBase.transform.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().color =
+                utilies.HexToColor("#AEA1AE");
+            shopBase.transform.Find("ShopItem_name").GetComponent<TextMeshProUGUI>().color =
+                utilies.HexToColor("#9F8D9F");
+        }
+
         shopBase.transform.Find("ShopItem_name").GetComponent<TextMeshProUGUI>().text = Name;
-        shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>().text = CurrentCost.ToString();
+        shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>().text =
+            utilies.NumberToFormattedString(CurrentCost);
         shopBase.transform.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = Count.ToString();
-        shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = Logo;
-        var xScaleFactor = Logo.bounds.size.x / Logo.bounds.size.y/0.942445993f;
+        shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = logo;
+        var xScaleFactor = logo.bounds.size.x / logo.bounds.size.y / 0.942445993f;
         var rect = shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().rect;
         rect.width *= xScaleFactor;
-        shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta = new Vector2(rect.width,rect.height);
+        shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta =
+            new Vector2(rect.width, rect.height);
 
         return building;
     }

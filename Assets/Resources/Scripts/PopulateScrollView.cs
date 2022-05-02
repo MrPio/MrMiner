@@ -9,6 +9,9 @@ public class PopulateScrollView : MonoBehaviour
     void Start()
     {
         foreach (var building in WoodBuildings.Buildings)
-            building.InstantiateGameObject(GameObject.Find("Content").transform);
+            building.InstantiateGameObject(Instantiate(
+                Resources.Load<GameObject>("Prefabs/ShopItem"),
+                GameObject.Find("Content").transform, false)
+            );
     }
 }
