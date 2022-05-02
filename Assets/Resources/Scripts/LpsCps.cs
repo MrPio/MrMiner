@@ -7,6 +7,7 @@ public class LpsCps : MonoBehaviour
 {
     [Range(10, 120)] public int Fps;
     private float _startTime;
+    private float passedSecond = 0;
 
     void Start()
     {
@@ -19,7 +20,15 @@ public class LpsCps : MonoBehaviour
         if (Time.time - _startTime > 1f / Fps)
         {
             _startTime = Time.time;
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().User.EarnLps(Fps);
+            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnLps(Fps);
+            
+            passedSecond += 1f / Fps;
+            if (passedSecond >= 1)
+            {
+                passedSecond -= 1;
+                foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
+                    shopItem.GetComponent<ShopItem>().TurnAvailability();
+            }
         }
     }
 }

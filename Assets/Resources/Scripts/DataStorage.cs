@@ -1,22 +1,23 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 public class  DataStorage : MonoBehaviour
     {
-        public User User;
+        public User user;
 
         private void Start()
         {
-            User = User.Load();
-            if (User == null)
-                User = new User();
+            //TODO -----------------> User = User.Load();
+            if (user == null)
+                user = new User();
             else
             {
                 Debug.Log("User loaded from save data!");
             }
 
-            User.CalculateLps();
-            User.CalculateClickPower();
+            user.CalculateLps();
+            user.CalculateClickPower();
         }
     }

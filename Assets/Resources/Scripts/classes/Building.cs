@@ -8,6 +8,10 @@ using Vector2 = UnityEngine.Vector2;
 [Serializable]
 public class Building
 {
+    private static int[] _upgradeCostMultiplier = {1, 5, 10, 100, 100, 100, 1000, 1000, 1000, 1000, 10000};
+    private static int[] _upgradeCostMultiplierFist = {1, 5, 20, 10, 100, 10, 10, 10, 1000, 1000, 1000, 1000};
+    private static int[] _upgradeRequired = {1, 5, 25, 50, 100, 150, 200, 250, 300, 350, 400};
+    private static int[] _upgradeRequiredFist = {1, 1, 5, 25, 50, 100, 150, 200, 250, 300, 350, 400};
     public string Name { get; }
     public BigInteger BaseCost { get; }
     public string ColorHex { get; }
@@ -18,8 +22,11 @@ public class Building
     public int Count { get; private set; }
     public BigInteger CurrentCost { get; private set; }
     public string Color { get; private set; }
+    public BigInteger UpgradeBaseCost { get; }
+    public bool Available { get; set; }
 
-    public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo)
+    public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo,
+        BigInteger upgradeBaseCost)
     {
         Name = name;
         BaseCost = baseCost;
@@ -30,6 +37,7 @@ public class Building
         Count = 0;
         SetCurrentCost();
         Color = colorHex;
+        UpgradeBaseCost = upgradeBaseCost;
     }
 
     public void Upgrade()
@@ -55,9 +63,12 @@ public class Building
         return lps;
     }
 
-    public GameObject InstantiateGameObject(GameObject building)
+    public GameObject InstantiateGameObject(GameObject building, int index)
     {
         var logo = Resources.Load<Sprite>(Logo);
+
+        building.GetComponent<ShopItem>().index = index;
+        building.tag = "ShopItem";
 
         var shopBase = building.transform.Find("ShopItem_base").gameObject;
         shopBase.GetComponent<Image>().color = utilies.HexToColor(Color);
@@ -80,6 +91,10 @@ public class Building
         shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta =
             new Vector2(rect.width, rect.height);
 
+        shopBase.transform.Find("ShopItem_version").GetComponent<TextMeshProUGUI>().text = "lv." + Version;
+
         return building;
     }
+
+
 }

@@ -111,6 +111,25 @@ public class User
         Debug.Log("UI updated in: " + stopWatch.ElapsedTicks + "ticks =1/10 nano");
     }
 
+    public bool Buy(Building building)
+    {
+        if (Logs >= building.CurrentCost)
+        {
+            Logs = BigInteger.Subtract(Logs, building.CurrentCost);
+            building.Buy();
+            CalculateLps();
+
+            var shopBase = GameObject.FindGameObjectsWithTag("ShopItem")[Buildings.IndexOf(building)].transform
+                .Find("ShopItem_base");
+            shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = building.Count.ToString();
+            shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>().text =
+                utilies.NumberToFormattedString(building.CurrentCost);
+            return true;
+        }
+
+        return false;
+    }
+
     public override string ToString()
     {
         return $"{nameof(_clickVersionLog)}: {_clickVersionLog}, {nameof(_clickVersionCoin)}: {_clickVersionCoin}," +

@@ -102,7 +102,7 @@ public class Tree : MonoBehaviour
         else
             PlaySound(_rustleAudioClip);
 
-        GameObject.Find("DataStorage").GetComponent<DataStorage>().User.EarnClick();
+        GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnClick();
     }
 
     private void PlaySound(IReadOnlyList<AudioClip> audioClips)

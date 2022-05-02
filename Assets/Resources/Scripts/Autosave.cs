@@ -19,7 +19,7 @@ public class Autosave : MonoBehaviour
         if (Time.time-_startTime > IntervalSeconds)
         {
             _startTime = Time.time;
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().User.Save();
+            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Save();
         }
     }
 }
