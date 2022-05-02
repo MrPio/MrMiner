@@ -1,0 +1,2 @@
+# MrMiner
+Idle game
