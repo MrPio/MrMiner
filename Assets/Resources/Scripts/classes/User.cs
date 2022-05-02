@@ -108,7 +108,7 @@ public class User
             utilies.DoubleToFormattedString(Lps) + " lps";
 
         stopWatch.Stop();
-        Debug.Log("UI updated in: " + stopWatch.ElapsedTicks + "ticks =1/10 nano");
+        //Debug.Log("UI updated in: " + stopWatch.ElapsedTicks + "ticks =1/10 nano");
     }
 
     public bool Buy(Building building)

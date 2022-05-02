@@ -2,10 +2,11 @@
 using System.Numerics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
-[Serializable]
+//[Serializable]
 public class Building
 {
     private static int[] _upgradeCostMultiplier = {1, 5, 10, 100, 100, 100, 1000, 1000, 1000, 1000, 10000};
@@ -23,7 +24,8 @@ public class Building
     public BigInteger CurrentCost { get; private set; }
     public string Color { get; private set; }
     public BigInteger UpgradeBaseCost { get; }
-    public bool Available { get; set; }
+
+    public bool available;
 
     public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo,
         BigInteger upgradeBaseCost)
@@ -40,6 +42,14 @@ public class Building
         UpgradeBaseCost = upgradeBaseCost;
     }
 
+    public static bool IsAvailable(int index)
+    {
+        var shopItem = GameObject.FindGameObjectsWithTag("ShopItem");
+        var shopBase = shopItem[index].transform.Find("ShopItem_base");
+        var shopAvailability = shopBase.Find("ShopItem_availability");
+        return !shopAvailability.gameObject.activeSelf;
+    }
+
     public void Upgrade()
     {
         ++Version;
@@ -53,7 +63,7 @@ public class Building
 
     private void SetCurrentCost()
     {
-        CurrentCost = BigInteger.Multiply(BaseCost, new BigInteger(Math.Pow(1.15f, Count)));
+        CurrentCost = new BigInteger((double) BaseCost * Math.Pow(1.15f, Count));
     }
 
     public double CalculateLps()
@@ -95,6 +105,4 @@ public class Building
 
         return building;
     }
-
-
 }

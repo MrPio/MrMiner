@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 839993645846699618}
   - component: {fileID: 1842421174555654205}
   - component: {fileID: 4423635515007653072}
+  - component: {fileID: 498720137231863065}
   m_Layer: 5
   m_Name: ShopItem_availability
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &839993645846699618
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27,16 +28,16 @@ RectTransform:
   m_GameObject: {fileID: 942901682141686679}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 6432697235674440860}
-  m_RootOrder: 2
+  m_Father: {fileID: 6432697235536213666}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 202, y: -2}
+  m_AnchoredPosition: {x: 0, y: -0.000091552734}
+  m_SizeDelta: {x: 0, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1842421174555654205
 CanvasRenderer:
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.4}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -76,6 +77,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &498720137231863065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942901682141686679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a62b8ae77b97fe4c863d4898b1d2b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
 --- !u!1 &1151662691343868464
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +125,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 39.6, y: 0.9}
+  m_AnchoredPosition: {x: -29, y: 4.3}
   m_SizeDelta: {x: 579.2, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &164283614849309641
@@ -176,7 +190,7 @@ MonoBehaviour:
   m_fontSizeMin: 35.5
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -609,7 +623,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 203.42856, y: 94.228516}
+  m_AnchoredPosition: {x: 203.42856, y: 87.59}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6432697235404332197
@@ -749,6 +763,7 @@ RectTransform:
   - {fileID: 569896251002610723}
   - {fileID: 8183711208312127799}
   - {fileID: 2421487751663128923}
+  - {fileID: 839993645846699618}
   m_Father: {fileID: 6432697235674440860}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -849,7 +864,6 @@ RectTransform:
   m_Children:
   - {fileID: 6432697235049940061}
   - {fileID: 6432697235536213666}
-  - {fileID: 839993645846699618}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1298,6 +1312,7 @@ GameObject:
   - component: {fileID: 974411189295456553}
   - component: {fileID: 1479405708646362880}
   - component: {fileID: 9026764294951924388}
+  - component: {fileID: 1741672536496009803}
   m_Layer: 5
   m_Name: ShopItem_price
   m_TagString: Untagged
@@ -1422,3 +1437,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1741672536496009803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989578244656554685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a62b8ae77b97fe4c863d4898b1d2b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1

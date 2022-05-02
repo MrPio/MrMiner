@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 using Vector2 = UnityEngine.Vector2;
 
 public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler,
@@ -117,32 +119,26 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
         ;
     }
 
-    public void TurnAvailability()
+    public void TurnAvailability(bool force=false)
     {
         var mode = BigInteger.Compare(GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Logs,
             GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].CurrentCost) >= 0;
 
-        var shopBase = transform.Find("ShopItem_base").gameObject;
-        var shopAvailability = transform.Find("ShopItem_availability").gameObject;
+        if (!force&&GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].available == mode)
+            return;
+        //Debug.Log("INVERTO--->"+index);
+
+        GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].available = mode;
+        
+        var shopBase = transform.Find("ShopItem_base");
+        var shopAvailability = shopBase.Find("ShopItem_availability").gameObject;
         var priceText = shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>();
 
-        shopAvailability.SetActive(!mode);
+        var trasp = mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
+        shopAvailability.GetComponent<ColorFade>().FadeToColor(trasp,typeof(Image));
 
-        if (GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].Available != mode)
-        {
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].Available = mode;
-            var color = mode ? Color.white : Color.gray;
-            StartCoroutine(ColorChange(priceText, color));
-        }
-    }
-
-    private IEnumerator ColorChange(TextMeshProUGUI textMeshProUGUI, Color color)
-    {
-        var initialColor = textMeshProUGUI.color;
-        var startTime = Time.time;
-        while (Time.time - startTime <= 1)
-            textMeshProUGUI.color = Color.Lerp(initialColor, color, Time.time - startTime);
-        return null;
+        var color = mode ? Color.white : Color.gray;
+        priceText.GetComponent<ColorFade>().FadeToColor(color,typeof(TextMeshProUGUI));
     }
 
     public void Buy()

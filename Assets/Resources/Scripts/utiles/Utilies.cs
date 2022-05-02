@@ -54,9 +54,6 @@ public class utilies : MonoBehaviour
 
     public static string DoubleToFormattedString(double num)
     {
-        if (num < 1000)
-            return num.ToString();
-        else
-            return NumberToFormattedString(new BigInteger(num));
+        return num < 1000 ? num.ToString("F1") : NumberToFormattedString(new BigInteger(num));
     }
 }

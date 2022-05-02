@@ -721,7 +721,6 @@ GameObject:
   - component: {fileID: 910395925}
   - component: {fileID: 910395924}
   - component: {fileID: 910395923}
-  - component: {fileID: 910395922}
   m_Layer: 0
   m_Name: DataStorage
   m_TagString: Untagged
@@ -729,18 +728,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &910395922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910395921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ad3eb0038366344cba4c033c079aa80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &910395923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,7 +735,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 910395921}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afa3fe5bf15a49946b0d696899e20250, type: 3}
   m_Name: 
@@ -766,8 +753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b1750b4bc44d75abb6b45b666e7bc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  User:
-    Buildings: []
 --- !u!4 &910395925
 Transform:
   m_ObjectHideFlags: 0
@@ -812,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d09b4ceb3b47245aad2a1404829be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Fps: 0
+  Fps: 10
 --- !u!4 &1344833983
 Transform:
   m_ObjectHideFlags: 0

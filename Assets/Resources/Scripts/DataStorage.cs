@@ -9,7 +9,9 @@ public class  DataStorage : MonoBehaviour
 
         private void Start()
         {
+            var x = WoodBuildings.Buildings;
             //TODO -----------------> User = User.Load();
+            user = null;
             if (user == null)
                 user = new User();
             else
@@ -19,5 +21,8 @@ public class  DataStorage : MonoBehaviour
 
             user.CalculateLps();
             user.CalculateClickPower();
+            
+            foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
+                shopItem.GetComponent<ShopItem>().TurnAvailability(true);
         }
     }
