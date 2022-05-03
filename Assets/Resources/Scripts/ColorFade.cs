@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ColorFade : MonoBehaviour
@@ -14,6 +15,8 @@ public class ColorFade : MonoBehaviour
     private float _startTime;
     private bool _animationDone = true;
     private Type _type;
+    private bool _goBack;
+    public AnimationCurve curve=AnimationCurve.Linear(0,0,1,1);
 
     void Start()
     {
@@ -25,11 +28,11 @@ public class ColorFade : MonoBehaviour
             return;
 
         var t = (Time.time - _startTime) / duration;
+        var color = Color.Lerp(_initialColor, _color, curve.Evaluate(t));
         if (_type == typeof(Image))
-            GetComponent<Image>().color = Color.Lerp(_initialColor, _color, t);
+            GetComponent<Image>().color = color;
         else if (_type == typeof(TextMeshProUGUI))
-            GetComponent<TextMeshProUGUI>().color = Color.Lerp(_initialColor, _color, t);
-
+            GetComponent<TextMeshProUGUI>().color = color;
         if (t > 1)
             _animationDone = true;
     }

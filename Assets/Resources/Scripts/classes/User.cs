@@ -18,7 +18,7 @@ public class User
     public BigInteger Coins { get; }
     public DateTime ProfileCreated { get; }
     public DateTime LastAutosave { get; private set; }
-    public double ClickPower { get; private set; }
+    public BigInteger ClickPower { get; private set; }
     public List<Building> Buildings;
     public double Lps { get; private set; }
     public double Cps { get; private set; }
@@ -80,9 +80,10 @@ public class User
     public void CalculateClickPower()
     {
         CalculateLps();
+        ClickPower = BigInteger.Multiply(BigInteger.Pow(new BigInteger(2), _clickVersionLog),
+            new BigInteger(Lps * _lpsPerc));
         //TODO
-        ClickPower = 10000;
-        ClickPower += Math.Pow(2, _clickVersionLog) + Lps * _lpsPerc;
+        ClickPower = BigInteger.Add(ClickPower, new BigInteger(1000));
     }
 
     public void EarnLps(int fps)
@@ -93,7 +94,7 @@ public class User
 
     public void EarnClick()
     {
-        Logs = BigInteger.Add(Logs, new BigInteger(ClickPower));
+        Logs = BigInteger.Add(Logs, ClickPower);
         UpdateUI();
     }
 
@@ -116,6 +117,9 @@ public class User
         if (Logs >= building.CurrentCost)
         {
             Logs = BigInteger.Subtract(Logs, building.CurrentCost);
+            GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(utilies.HexToColor("#FF5C26"),typeof(TextMeshProUGUI));
+            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger("Bounce");
+
             building.Buy();
             CalculateLps();
 

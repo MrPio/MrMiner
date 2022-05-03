@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Numerics;
+using TMPro;
+using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
 
 namespace utiles
 {
-    public class Effect: MonoBehaviour
+    public class Effect : MonoBehaviour
     {
         public static void ClickEffect(Vector2 position, Color color)
         {
@@ -24,5 +29,19 @@ namespace utiles
             }
         }
 
+        public static void SpawnFloatingText(Vector2 position, BigInteger value, float duration,
+            string color = "#8EFF7C")
+        {
+            var floating = Instantiate(Resources.Load<GameObject>("Prefabs/Floating"),
+                position, Quaternion.identity,
+                GameObject.Find("Canvas").transform);
+            floating.GetComponent<FloatingText>().duration = duration;
+            foreach (var text in floating.transform.GetComponentsInChildren<TextMeshProUGUI>())
+            {
+                text.color = utilies.HexToColor(color);
+                if (!text.text.Equals("+"))
+                    text.text = utilies.NumberToFormattedString(value);
+            }
+        }
     }
 }

@@ -347,6 +347,39 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  clickSpeedToFloatingSpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.2676239
+      value: 0.29924774
+      inSlope: 0.007156069
+      outSlope: 0.007156069
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 104.67155
+      value: 1.0463694
+      inSlope: 0.007772836
+      outSlope: 0.007772836
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 292.15442
+      value: 1.9817464
+      inSlope: -0.0002939797
+      outSlope: -0.0002939797
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.092379995
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   dropChance: 0.5
 --- !u!60 &9181060333622587447
 PolygonCollider2D:

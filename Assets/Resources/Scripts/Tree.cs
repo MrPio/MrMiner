@@ -11,7 +11,7 @@ public class Tree : MonoBehaviour
     [SerializeField] public GameObject leaf;
     [SerializeField] public GameObject dropLog;
     private Animator _anim;
-    public AnimationCurve clickSpeedToLeafSpeed;
+    public AnimationCurve clickSpeedToLeafSpeed,clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
 
     private readonly ArrayList _clicks = new();
@@ -91,6 +91,9 @@ public class Tree : MonoBehaviour
         leafObj.GetComponent<LeafDrop>().speed =
             _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed) : 0.3f;
         Effect.ClickEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#76E573"));
+        Effect.SpawnFloatingText(Input.mousePosition,
+            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.ClickPower,
+            _clicks.Count > 1 ? clickSpeedToFloatingSpeed.Evaluate(_clickCurrentSpeed) : 2f);
 
         if (Random.Range(0f, 1f) < dropChance)
         {
@@ -103,6 +106,7 @@ public class Tree : MonoBehaviour
             PlaySound(_rustleAudioClip);
 
         GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnClick();
+        GameObject.Find("Header_log_value").GetComponent<Animator>().SetTrigger("Bounce");
     }
 
     private void PlaySound(IReadOnlyList<AudioClip> audioClips)

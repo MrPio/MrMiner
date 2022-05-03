@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using utiles;
@@ -67,6 +68,8 @@ public class LogResources : MonoBehaviour
         GameObject.Find("Main Camera").GetComponent<AudioSource>()
             .PlayOneShot(Resources.Load("Raws/badge") as AudioClip);
         Effect.ClickEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition),utilies.HexToColor("#F8DB95"));
+        GameObject.Find("Header_log_value").GetComponent<Animator>().SetTrigger("Bounce");
+        GameObject.Find("Header_log_value").GetComponent<ColorFade>().FadeToColor(utilies.HexToColor("#FFFD73"), typeof(TextMeshProUGUI));
         Destroy(gameObject);
     }
 }
