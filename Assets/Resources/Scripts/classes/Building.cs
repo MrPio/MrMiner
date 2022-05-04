@@ -3,45 +3,36 @@ using System.Linq;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 //[Serializable]
 public class Building
 {
-    private static int[] _upgradeCostMultiplier = {1, 5, 10, 100, 100, 100, 1000, 1000, 1000, 1000, 10000};
-    private static int[] _upgradeCostMultiplierFist = {1, 5, 20, 10, 100, 10, 10, 10, 1000, 1000, 1000, 1000};
-    private static int[] _upgradeRequired = {1, 5, 25, 50, 100, 150, 200, 250, 300, 350, 400};
-    private static int[] _upgradeRequiredFist = {1, 1, 5, 25, 50, 100, 150, 200, 250, 300, 350, 400};
-    public string Name { get; }
-    public BigInteger BaseCost { get; }
-    public string ColorHex { get; }
-    public double BaseLps { get; }
-    public string Logo { get; }
-
     public int Version { get; private set; }
     public int Count { get; private set; }
     public BigInteger CurrentCost { get; private set; }
-    public string Color { get; private set; }
-    public BigInteger UpgradeBaseCost { get; }
+    private string Color { get; set; }
+    private BigInteger UpgradeBaseCost { get; }
+    public bool BuildingAvailable, UpgradeAvailable;
 
-    public bool buildingAvailable,upgradeAvailable;
-    
+    private string Name { get; }
+    private BigInteger BaseCost { get; }
+    private double BaseLps { get; }
+    private string Logo { get; }
 
     public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo,
         BigInteger upgradeBaseCost)
     {
         Name = name;
         BaseCost = baseCost;
-        ColorHex = colorHex;
         BaseLps = baseLps;
         Logo = logo;
         Version = 0;
         Count = 0;
-        SetCurrentCost();
         Color = colorHex;
         UpgradeBaseCost = upgradeBaseCost;
+        SetCurrentCost();
     }
 
     public void Upgrade()
@@ -53,8 +44,6 @@ public class Building
     {
         var requirements = Name == "Mighty Fist" ? WoodBuildings.RequiredProgressFist : WoodBuildings.RequiredProgress;
         var upgradesAvailable = requirements.Count(requirement => Count >= requirement);
-        if(upgradesAvailable>Version)
-            Debug.Log("New Upgrade Available!");
         return upgradesAvailable > Version;
     }
 
@@ -104,7 +93,7 @@ public class Building
 
         shopBase.transform.Find("ShopItem_name").GetComponent<TextMeshProUGUI>().text = Name;
         shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>().text =
-            utilies.NumberToFormattedString(CurrentCost);
+            utilies.NumToStr(CurrentCost);
         shopBase.transform.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = Count.ToString();
         shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = logo;
         var xScaleFactor = logo.bounds.size.x / logo.bounds.size.y / 0.942445993f;

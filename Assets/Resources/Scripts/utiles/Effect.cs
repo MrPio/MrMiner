@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 
@@ -11,6 +13,8 @@ namespace utiles
     {
         public static void ClickEffect(Vector2 position, Color color)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var circle = new Circle(0.2f, position);
             float alpha = 0;
             for (var i = 0; i < 8; ++i)
@@ -27,6 +31,9 @@ namespace utiles
 
                 alpha += 2 * Mathf.PI / 8;
             }
+
+            stopwatch.Stop();
+            Debug.Log("CircleEffect took--> " + stopwatch.ElapsedTicks);
         }
 
         public static void SpawnFloatingText(Vector2 position, BigInteger value, float duration,
@@ -41,7 +48,7 @@ namespace utiles
             {
                 text.color = utilies.HexToColor(color);
                 if (!text.text.Equals("+"))
-                    text.text = utilies.NumberToFormattedString(value);
+                    text.text = utilies.NumToStr(value);
             }
         }
     }

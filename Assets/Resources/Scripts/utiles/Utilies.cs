@@ -13,25 +13,25 @@ public class utilies : MonoBehaviour
     /// returns a Vector2 containing max x and max y in WorldPoint
     /// </summary>
     /// <returns></returns>
-    public static Vector2 GetCameraBounds()
+    public static Vector2 GetCameraBounds(Camera camera)
     {
-        var orthographicSize = Camera.main.orthographicSize;
+        var orthographicSize = camera.orthographicSize;
         return new Vector2(
             orthographicSize * Screen.width / Screen.height,
             orthographicSize * Screen.height / Screen.width
         );
     }
 
-    public static Vector2 RandomWorldPointInCollider(Collider2D collider)
+    public static Vector2 RandomPointInCollider(Collider2D collider,Camera camera)
     {
-        Vector2 point = default;
+        Vector2 point;
         var count = 0;
         do
         {
             if (++count > 10000)
                 throw new Exception("cannot find the point inside the collider within 10_000 tries!");
             var randomViewPortPoint = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0f);
-            point = Camera.main.ViewportToWorldPoint(randomViewPortPoint);
+            point = camera.ViewportToWorldPoint(randomViewPortPoint);
         } while (!collider.OverlapPoint(point));
 
         return point;
@@ -42,7 +42,7 @@ public class utilies : MonoBehaviour
         return ColorUtility.TryParseHtmlString(hex, out var newCol) ? newCol : Color.black;
     }
 
-    public static string NumberToFormattedString(BigInteger num)
+    public static string NumToStr(BigInteger num)
     {
         var root = new[] {"", "K", "M", "B", "T", "q", "Q", "s", "S", "O", "N", "d", "U", "D"};
         var pattern = num.ToString("N0");
@@ -52,8 +52,8 @@ public class utilies : MonoBehaviour
         return commas[0] + "," + commas[1] + " " + root[commas.Length - 1];
     }
 
-    public static string DoubleToFormattedString(double num)
+    public static string DoubleToStr(double num)
     {
-        return num < 1000 ? num.ToString("F1") : NumberToFormattedString(new BigInteger(num));
+        return num < 1000 ? num.ToString("F1") : NumToStr(new BigInteger(num));
     }
 }

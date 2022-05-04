@@ -1,24 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Autosave : MonoBehaviour
 {
-    [Range(1,600)]
-    [SerializeField] public int IntervalSeconds = 4;
+    [Range(1, 600)] public int intervalSeconds = 4;
 
+    private User _user;
     private float _startTime;
-    void Start()
+
+    private void Start()
     {
+        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
         _startTime = Time.time;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Time.time-_startTime > IntervalSeconds)
+        if (Time.time - _startTime > intervalSeconds)
         {
             _startTime = Time.time;
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Save();
+            _user.Save();
         }
     }
 }

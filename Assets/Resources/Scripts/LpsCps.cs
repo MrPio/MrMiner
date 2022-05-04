@@ -1,34 +1,39 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LpsCps : MonoBehaviour
 {
-    [Range(10, 120)] public int Fps;
+    [Range(10, 120)] public int fps;
+    
     private float _startTime;
-    private float passedSecond = 0;
+    private float _passedSecond ;
+    private User _user;
+    private readonly List<ShopItem> _shopItems = new();
 
-    void Start()
+    private void Start()
     {
+        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
+        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
+            _shopItems.Add(shopItem.GetComponent<ShopItem>());
+
         _startTime = Time.time;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Time.time - _startTime > 1f / Fps)
+        if (Time.time - _startTime > 1f / fps)
         {
             _startTime = Time.time;
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnLps(Fps);
+            _user.EarnLps(fps);
 
-            passedSecond += 1f / Fps;
-            if (passedSecond >= 0.5f)
+            _passedSecond += 1f / fps;
+            if (_passedSecond >= 0.5f)
             {
-                passedSecond -= 0.5f;
-                foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
+                _passedSecond -= 0.5f;
+                foreach (var shopItem in _shopItems)
                 {
-                    shopItem.GetComponent<ShopItem>().TurnAvailability();
-                    shopItem.GetComponent<ShopItem>().TurnUpgradeAvailability();
+                    shopItem.TurnAvailability();
+                    shopItem.TurnUpgradeAvailability();
                 }
             }
         }

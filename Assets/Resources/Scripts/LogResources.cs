@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using utiles;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
@@ -15,35 +12,49 @@ public class LogResources : MonoBehaviour
 {
     public AnimationCurve moveCurveX, moveCurveY, rotateCurveZ;
     [Range(0.001f, 1f)] public float speed = .5f;
-    private float _timeStart;
     public float finalPosY = 1.2f;
+
+    private float _timeStart;
     private Vector2 _startPoint;
     private bool _left;
     private float _totalAngle;
     private float _finalPosX;
     private BigInteger _value;
+    private Camera _camera;
+    private User _user;
+    private AudioSource _audioSource;
+    private AudioClip _badge;
+    private Animator _headerLogValueAnimator;
+    private ColorFade _headerLogValueColorFade;
+    private static readonly int Bounce = Animator.StringToHash("Bounce");
 
-    void Start()
+    private void Start()
     {
+        _camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
+        _audioSource = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>();
+        _badge = Resources.Load("Raws/badge") as AudioClip;
+        _headerLogValueAnimator = GameObject.Find("Header_log_value").GetComponent<Animator>();
+        _headerLogValueColorFade = GameObject.Find("Header_log_value").GetComponent<ColorFade>();
+
         _left = Random.Range(0f, 1f) < .5f;
         var spawnZone = GameObject.Find(_left ? "LogSpawnZone_001" : "LogSpawnZone_002");
-        _startPoint = utilies.RandomWorldPointInCollider(spawnZone.GetComponent<PolygonCollider2D>());
+        _startPoint = utilies.RandomPointInCollider(spawnZone.GetComponent<PolygonCollider2D>(), _camera);
         GetComponent<SpriteRenderer>().flipX = Random.Range(0f, 1f) < .5f;
         _totalAngle = Random.Range(360 * 2f, 360 * 3f);
 
-        _finalPosX = Random.Range(0, utilies.GetCameraBounds().x * 0.8f);
+        _finalPosX = Random.Range(0, utilies.GetCameraBounds(_camera).x * 0.8f);
         _finalPosX = _left ? -_finalPosX : _finalPosX;
         finalPosY += Random.Range(-0.3f, 0.3f);
 
         var scale = Random.Range(0.8f, 1.2f);
         transform.localScale *= scale;
-        _value = new BigInteger((double) GameObject.Find("DataStorage").GetComponent<DataStorage>().user.ClickPower *
-                                4f * scale);
+        _value = new BigInteger((double) _user.ClickPower * 4f * Math.Pow(scale, 1.6f));
 
         _timeStart = Time.time;
     }
 
-    void Update()
+    private void Update()
     {
         var t = Time.time - _timeStart;
         if (t * speed > 1)
@@ -73,13 +84,12 @@ public class LogResources : MonoBehaviour
 
     private void OnMouseUp()
     {
-        GameObject.Find("Main Camera").GetComponent<AudioSource>()
-            .PlayOneShot(Resources.Load("Raws/badge") as AudioClip);
-        Effect.ClickEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#F8DB95"));
-        GameObject.Find("Header_log_value").GetComponent<Animator>().SetTrigger("Bounce");
-        GameObject.Find("Header_log_value").GetComponent<ColorFade>()
+        _audioSource.PlayOneShot(_badge);
+        Effect.ClickEffect(_camera.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#F8DB95"));
+        _headerLogValueAnimator.SetTrigger(Bounce);
+        _headerLogValueColorFade
             .FadeToColor(Color.white, utilies.HexToColor("#FFFD73"), typeof(TextMeshProUGUI));
-        GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnClick(_value);
+        _user.EarnClick(_value);
         Effect.SpawnFloatingText(Input.mousePosition, _value, 1.6f);
         Destroy(gameObject);
     }

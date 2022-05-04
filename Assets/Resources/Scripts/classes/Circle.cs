@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Circle
 {
-    public float Radius { get; }
+    private float Radius { get; }
     public Vector2 Center { get; }
 
     public Circle(float radius, Vector2 center)
@@ -17,10 +17,10 @@ public class Circle
     }
 
 
-    public Vector2 GetPointFromAngle(float angleRadiants)
+    public Vector2 GetPointFromAngle(float angleRadiant)
     {
-        var vec= new Vector2((Mathf.Cos(angleRadiants) * Radius + Center.x),
-                           (Mathf.Sin(angleRadiants) * Radius + Center.y));
+        var vec= new Vector2((Mathf.Cos(angleRadiant) * Radius + Center.x),
+                           (Mathf.Sin(angleRadiant) * Radius + Center.y));
         return vec;
     }
 
@@ -32,7 +32,7 @@ public class Circle
         return Mathf.Acos((+point.x - Center.x) / radius) / Mathf.PI * 180f;
     }
 
-    public float GetDistaceFromCenter(Vector2 point)
+    public float GetDistanceFromCenter(Vector2 point)
     {
         return Mathf.Sqrt(Mathf.Pow(Center.x - point.x, 2) + Mathf.Pow(Center.y - point.y, 2));
     }

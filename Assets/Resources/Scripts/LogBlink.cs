@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LogBlink : MonoBehaviour
 {
     public AnimationCurve curveBlink, curveExp, curveAcceleration;
     public float duration;
+    
     private float _startTime;
     private SpriteRenderer _spriteRenderer;
 

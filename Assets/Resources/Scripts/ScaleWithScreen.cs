@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ScaleWithScreen : MonoBehaviour
 {
-    public bool KeepAspectRatio;
+    public bool keepAspectRatio;
 
-    void Start()
+    private void Start()
     {
+        var mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         var topRightCorner =
-            Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+            mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
         var worldSpaceWidth = topRightCorner.x * 2;
         var worldSpaceHeight = topRightCorner.y * 2;
 
@@ -18,17 +17,11 @@ public class ScaleWithScreen : MonoBehaviour
         var scaleFactorX = worldSpaceWidth / spriteSize.x;
         var scaleFactorY = worldSpaceHeight / spriteSize.y;
 
-        if (KeepAspectRatio)
-        {
+        if (keepAspectRatio)
             if (scaleFactorX > scaleFactorY)
-            {
                 scaleFactorY = scaleFactorX;
-            }
             else
-            {
                 scaleFactorX = scaleFactorY;
-            }
-        }
 
         gameObject.transform.localScale = new Vector3(scaleFactorX, scaleFactorY, 1);
     }

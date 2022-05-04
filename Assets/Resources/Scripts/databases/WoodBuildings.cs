@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using System.Numerics;
-
+﻿using System.Numerics;
 
 public abstract class WoodBuildings
 {

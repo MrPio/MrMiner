@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CircleScript : MonoBehaviour
 {
     [Range(1, 100)] public const float Velocity = 14.0f;
     [Range(0.1f, 1)] public float duration = 0.6f;
 
+    private SpriteRenderer _spriteRenderer;
     private float _elapsed;
+
+    private void Start()
+    {
+        _spriteRenderer=GetComponent<SpriteRenderer>();
+    }
 
     private void Update()
     {
@@ -15,9 +20,9 @@ public class CircleScript : MonoBehaviour
         localScale = new Vector2(localScale.x,
             localScale.y - localScale.y * _elapsed / (duration * Random.Range(60, 100)));
         transform.localScale = localScale;
-        var color = GetComponent<SpriteRenderer>().color;
+        var color = _spriteRenderer.color;
         color.a = 1 - _elapsed / duration;
-        GetComponent<SpriteRenderer>().color = color;
+        _spriteRenderer.color = color;
         if (_elapsed > duration)
             Destroy(gameObject);
     }

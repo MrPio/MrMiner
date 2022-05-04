@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +10,12 @@ public class AvailabilityFade : MonoBehaviour
     private float _startTime;
     private bool _animationDone = true;
 
-    void Start()
+    private void Start()
     {
         _imageComponent = GetComponent<Image>();
     }
 
-    void Update()
+    private void Update()
     {
         if (_animationDone)
             return;

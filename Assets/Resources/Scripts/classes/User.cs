@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 using Debug = UnityEngine.Debug;
 
 [Serializable]
 public class User
 {
-    private static readonly string _saveFileLocation = "/MrMiner_User.dat";
+    private static readonly string SaveFileLocation = "/MrMiner_User.dat";
+
     public BigInteger Logs { get; private set; }
     public BigInteger Coins { get; }
     public DateTime ProfileCreated { get; }
@@ -22,9 +22,12 @@ public class User
     public List<Building> Buildings;
     public double Lps { get; private set; }
     public double Cps { get; private set; }
+    public List<TextMeshProUGUI> shopItemValueText, shopItemPriceText;
 
-    private int _clickVersionLog, _clickVersionCoin, _lpsPerc, _cpsPerc;
+    private int _clickVersionLog, _clickVersionCoin;
+    private int _lpsPerc, _cpsPerc;
     private double _lpsRest, _cpsRest;
+    private static readonly int Bounce = Animator.StringToHash("Bounce");
 
 
     public User()
@@ -42,29 +45,29 @@ public class User
             Buildings.Add(building);
         _clickVersionLog = 0;
         _clickVersionCoin = 0;
+        shopItemValueText = new List<TextMeshProUGUI>();
+        shopItemPriceText = new List<TextMeshProUGUI>();
     }
 
     public void Save()
     {
         LastAutosave = DateTime.Now;
-        var bf = new BinaryFormatter();
-        if (File.Exists(Application.persistentDataPath + _saveFileLocation))
-            File.Delete(Application.persistentDataPath + _saveFileLocation);
-        var file = File.Create(Application.persistentDataPath + _saveFileLocation);
-        bf.Serialize(file, this);
+        var path = Application.persistentDataPath + SaveFileLocation;
+        if (File.Exists(path))
+            File.Delete(path);
+        var file = File.Create(path);
+        new BinaryFormatter().Serialize(file, this);
         file.Close();
         Debug.Log("Game data saved!");
-        Debug.Log(Load());
     }
 
     public static User Load()
     {
-        if (!File.Exists(Application.persistentDataPath + _saveFileLocation))
+        var path = Application.persistentDataPath + SaveFileLocation;
+        if (!File.Exists(path))
             return null;
-        var bf = new BinaryFormatter();
-        var file =
-            File.Open(Application.persistentDataPath + _saveFileLocation, FileMode.Open);
-        var user = (User) bf.Deserialize(file);
+        var file = File.Open(path, FileMode.Open);
+        var user = (User) new BinaryFormatter().Deserialize(file);
         file.Close();
         user.UpdateUI();
         return user;
@@ -83,7 +86,6 @@ public class User
         CalculateLps();
         ClickPower = BigInteger.Multiply(BigInteger.Pow(new BigInteger(2), _clickVersionLog),
             new BigInteger(Lps * _lpsPerc));
-        //TODO
         ClickPower = BigInteger.Add(ClickPower, new BigInteger(1000));
     }
 
@@ -113,9 +115,9 @@ public class User
         stopWatch.Start();
 
         GameObject.Find("Header_log_value").GetComponent<TextMeshProUGUI>().text =
-            utilies.NumberToFormattedString(Logs);
+            utilies.NumToStr(Logs);
         GameObject.Find("Header_lps").GetComponent<TextMeshProUGUI>().text =
-            utilies.DoubleToFormattedString(Lps) + " lps";
+            utilies.DoubleToStr(Lps) + " lps";
 
         stopWatch.Stop();
         //Debug.Log("UI updated in: " + stopWatch.ElapsedTicks + "ticks =1/10 nano");
@@ -128,16 +130,13 @@ public class User
             Logs = BigInteger.Subtract(Logs, building.CurrentCost);
             GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
                 utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
-            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger("Bounce");
+            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
             building.Buy();
             CalculateLps();
 
-            var shopBase = GameObject.FindGameObjectsWithTag("ShopItem")[Buildings.IndexOf(building)].transform
-                .Find("ShopItem_base");
-            shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = building.Count.ToString();
-            shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>().text =
-                utilies.NumberToFormattedString(building.CurrentCost);
+            shopItemValueText.ElementAt(Buildings.IndexOf(building)).text = building.Count.ToString();
+            shopItemPriceText.ElementAt(Buildings.IndexOf(building)).text = utilies.NumToStr(building.CurrentCost);
             return true;
         }
 
@@ -151,7 +150,7 @@ public class User
             Logs = BigInteger.Subtract(Logs, building.CalculateUpgradeCost());
             GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
                 utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
-            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger("Bounce");
+            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
             building.Upgrade();
             CalculateLps();

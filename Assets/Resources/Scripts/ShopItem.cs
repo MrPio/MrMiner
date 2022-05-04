@@ -1,7 +1,6 @@
 using System.Numerics;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
@@ -9,49 +8,75 @@ using Vector2 = UnityEngine.Vector2;
 public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler,
     IPointerUpHandler
 {
+    private static AudioClip _mouseDownAudioClip;
+    private static AudioClip _mouseUpAudioClip;
+    private static AudioClip _notEnoughMoney;
+    private static AudioClip _bought;
+    private static AudioClip _charge;
+
     public float downTimeForUpdate = 1;
     public GameObject shopItemHold;
     public AnimationCurve onPressCurve;
     public float onPressAnimationDuration = 0.5f;
+    public int index;
+
     private bool _onDownAnimation;
     private bool _onUpAnimation;
     private float _downTime;
-
-    private float _onPressStartTime;
+    private float _timeStart;
     private float _onPressAnimationScale;
-    public static AudioClip MouseDownAudioClip;
-    public static AudioClip MouseUpAudioClip;
-    public static AudioClip NotEnoughMoney;
-    public static AudioClip Bought;
-    public static AudioClip Charge;
-    public int index;
     private float _shopBaseInitialLocalPosY;
     private bool _updateMode;
     private bool _holdStarted;
     private bool _forcedUp;
+    private Image _shopItemHoldImage;
+    private RectTransform _shopItemHoldRectTransform;
+    private Transform _shopBase;
+    private AudioSource _audioSource;
+    private TextMeshProUGUI _shopItemPriceUpgradeText;
+    private TextMeshProUGUI _shopItemVersionText;
+    private User _user;
+    private Building _userBuilding;
+    private ColorFade _upgradePriceTextColorFade;
+    private ColorFade _shopAvailabilityColorFade;
+    private ColorFade _priceTextColorFade;
+    private Animator _animator;
 
     private void Start()
     {
-        MouseDownAudioClip = Resources.Load("Raws/click_down_003") as AudioClip;
-        MouseUpAudioClip = Resources.Load("Raws/click_up_002") as AudioClip;
-        Bought = Resources.Load("Raws/buy") as AudioClip;
-        NotEnoughMoney = Resources.Load("Raws/fx_no_buy") as AudioClip;
-        Charge = Resources.Load("Raws/charge_01") as AudioClip;
+        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
+        _userBuilding = _user.Buildings[index];
+        _mouseDownAudioClip = Resources.Load("Raws/click_down_003") as AudioClip;
+        _mouseUpAudioClip = Resources.Load("Raws/click_up_002") as AudioClip;
+        _bought = Resources.Load("Raws/buy") as AudioClip;
+        _notEnoughMoney = Resources.Load("Raws/fx_no_buy") as AudioClip;
+        _charge = Resources.Load("Raws/charge_01") as AudioClip;
         _onPressAnimationScale = 1 / onPressAnimationDuration;
-        _shopBaseInitialLocalPosY = transform.Find("ShopItem_base").localPosition.y;
+        _shopBaseInitialLocalPosY = _shopBase.localPosition.y;
+        _shopBase = transform.Find("ShopItem_base");
+        _shopItemHoldImage = shopItemHold.GetComponent<Image>();
+        _shopItemHoldRectTransform = shopItemHold.GetComponent<RectTransform>();
+        _audioSource = GetComponent<AudioSource>();
+        _shopItemPriceUpgradeText = _shopBase.Find("ShopItem_price_upgrade").GetComponent<TextMeshProUGUI>();
+        _shopItemVersionText = _shopBase.Find("ShopItem_version").GetComponent<TextMeshProUGUI>();
+        _upgradePriceTextColorFade = _shopBase.transform.Find("ShopItem_price_upgrade").GetComponent<ColorFade>();
+        _shopAvailabilityColorFade = _shopBase.Find("ShopItem_availability").gameObject.GetComponent<ColorFade>();
+        _priceTextColorFade = _shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>()
+            .GetComponent<ColorFade>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        var t = Time.time - _onPressStartTime;
+        var t = Time.time - _timeStart;
 
         if (!_onDownAnimation && !_onUpAnimation)
         {
-            var color = shopItemHold.GetComponent<Image>().color;
+            var color = _shopItemHoldImage.color;
             if (color.a > 0.01f)
             {
                 color.a = 1 - t * 3;
-                shopItemHold.GetComponent<Image>().color = color;
+                _shopItemHoldImage.color = color;
             }
 
             return;
@@ -66,7 +91,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
             else if (_onUpAnimation)
                 localY = -15f + 15f * onPressCurve.Evaluate(t * _onPressAnimationScale);
 
-            transform.Find("ShopItem_base").localPosition = new Vector2(0, _shopBaseInitialLocalPosY + localY);
+            _shopBase.localPosition = new Vector2(0, _shopBaseInitialLocalPosY + localY);
         }
 
         if (t * _onPressAnimationScale > 1f)
@@ -84,17 +109,17 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
             if (!_holdStarted)
             {
-                shopItemHold.GetComponent<RectTransform>().position = Input.mousePosition;
-                GetComponent<AudioSource>().PlayOneShot(Charge);
+                _shopItemHoldRectTransform.position = Input.mousePosition;
+                _audioSource.PlayOneShot(_charge);
             }
 
             _holdStarted = true;
-            shopItemHold.GetComponent<RectTransform>().localScale =
+            _shopItemHoldRectTransform.localScale =
                 Vector2.one * (0.5f + 18f * newT);
 
-            var color = shopItemHold.GetComponent<Image>().color;
+            var color = _shopItemHoldImage.color;
             color.a = newT;
-            shopItemHold.GetComponent<Image>().color = color;
+            _shopItemHoldImage.color = color;
             if (newT > 0.86f)
             {
                 _forcedUp = true;
@@ -120,154 +145,92 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        GetComponent<AudioSource>().PlayOneShot(MouseDownAudioClip);
+        _audioSource.PlayOneShot(_mouseDownAudioClip);
         _onDownAnimation = true;
         _onUpAnimation = false;
-        _onPressStartTime = Time.time;
+        _timeStart = Time.time;
 
-        transform.Find("ShopItem_base").Find("ShopItem_highlight").gameObject.SetActive(true);
+        _shopBase.Find("ShopItem_highlight").gameObject.SetActive(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         _holdStarted = false;
-        GetComponent<AudioSource>().PlayOneShot(MouseUpAudioClip);
+        _audioSource.PlayOneShot(_mouseUpAudioClip);
         _onDownAnimation = false;
         _onUpAnimation = true;
-        _downTime = Time.time - _onPressStartTime;
-        _onPressStartTime = Time.time;
+        _downTime = Time.time - _timeStart;
+        _timeStart = Time.time;
 
-        transform.Find("ShopItem_base").Find("ShopItem_highlight").gameObject.SetActive(false);
+        _shopBase.Find("ShopItem_highlight").gameObject.SetActive(false);
     }
 
-    public void TurnUpdateModeIfNecessary()
+    public void TurnUpgradeModeIfNecessary()
     {
-        var building = GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index];
-        if (_updateMode == building.CheckForUpgrade())
+        _shopItemPriceUpgradeText.text = utilies.NumToStr(_userBuilding.CalculateUpgradeCost());
+        _shopItemVersionText.text = "lv." + _userBuilding.Version;
+        
+        if (_updateMode == _userBuilding.CheckForUpgrade())
             return;
-
-        var shopBase = transform.Find("ShopItem_base").transform;
-        shopBase.Find("ShopItem_price_upgrade").GetComponent<TextMeshProUGUI>().text =
-            utilies.NumberToFormattedString(building.CalculateUpgradeCost());
-        shopBase.Find("ShopItem_version").GetComponent<TextMeshProUGUI>().text = "lv." + building.Version;
-
+        
         _updateMode = !_updateMode;
-        var trigger = "Close";
-        if (_updateMode)
-            trigger = "Open";
-        GetComponent<Animator>().SetTrigger(trigger);
-        /*var mode = false; //todo
-
-        var shopBase = transform.Find("ShopItem_base").gameObject;
-        var shopShadow = transform.Find("ShopItem_shadow").gameObject;
-        var rectBase = shopBase.GetComponent<RectTransform>().rect;
-        var rectShadow = shopShadow.GetComponent<RectTransform>().rect;
-        var rectPrice = shopBase.transform.Find("ShopItem_price").GetComponent<RectTransform>().rect;
-        var rectLog = shopBase.transform.Find("ShopItem_log").GetComponent<RectTransform>().rect;
-
-        if (mode)
-        {
-            rectBase.height = 218;
-            rectShadow.height = 218;
-            rectPrice.y = -82;
-            rectLog.y = -115;
-        }
-        else
-        {
-            rectBase.height = 177;
-            rectShadow.height = 177;
-            rectPrice.y = -95;
-            rectLog.y = -128;
-        }
-
-        shopBase.GetComponent<RectTransform>().sizeDelta = new Vector2(rectBase.width, rectBase.height);
-        shopShadow.GetComponent<RectTransform>().sizeDelta = new Vector2(rectShadow.width, rectShadow.height);
-        shopBase.transform.Find("ShopItem_price").GetComponent<RectTransform>().position =
-            new Vector2(rectPrice.x, rectPrice.y);
-        shopBase.transform.Find("ShopItem_log").GetComponent<RectTransform>().position =
-            new Vector2(rectLog.x, rectLog.y);*/
+        _animator.SetTrigger(_updateMode?"Open":"Close");
     }
 
     public void TurnAvailability(bool force = false)
     {
-        var mode = BigInteger.Compare(GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Logs,
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].CurrentCost) >= 0;
-
-
-        if (!force &&
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].buildingAvailable ==
-            mode)
+        var mode = BigInteger.Compare(_user.Logs, _userBuilding.CurrentCost) >= 0;
+        if (!force && _userBuilding.BuildingAvailable == mode)
             return;
-        //Debug.Log("INVERTO--->"+index);
 
-        GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].buildingAvailable = mode;
+        _userBuilding.BuildingAvailable = mode;
 
-        var shopBase = transform.Find("ShopItem_base");
-        var shopAvailability = shopBase.Find("ShopItem_availability").gameObject;
-        var priceText = shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>();
+        var colorFinal = mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
+        var colorInitial = !mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
+        _shopAvailabilityColorFade.FadeToColor(colorInitial, colorFinal, typeof(Image));
 
-        var traspFinal = mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
-        var traspInitial = !mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
-        shopAvailability.GetComponent<ColorFade>().FadeToColor(traspInitial, traspFinal, typeof(Image));
-
-        var colorFinal = mode ? Color.green : Color.gray;
-        var colorInitial = !mode ? Color.green : Color.gray;
-        priceText.GetComponent<ColorFade>().FadeToColor(colorInitial, colorFinal, typeof(TextMeshProUGUI));
+        colorFinal = mode ? Color.green : Color.gray;
+        colorInitial = !mode ? Color.green : Color.gray;
+        _priceTextColorFade.FadeToColor(colorInitial, colorFinal, typeof(TextMeshProUGUI));
     }
 
     public void TurnUpgradeAvailability(bool force = false)
     {
-        if (!GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].CheckForUpgrade())
+        if (!_userBuilding.CheckForUpgrade())
             return;
 
-        var shopBase = transform.Find("ShopItem_base");
-        var upgradeMode = BigInteger.Compare(GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Logs,
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index]
-                .CalculateUpgradeCost()) >= 0;
+        var upgradeMode = BigInteger.Compare(_user.Logs, _userBuilding.CalculateUpgradeCost()) >= 0;
 
-        if (!force &&
-            GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].upgradeAvailable ==
-            upgradeMode)
+        if (!force && _userBuilding.UpgradeAvailable == upgradeMode)
             return;
-        GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index].upgradeAvailable = upgradeMode;
 
-        var upgradePriceText = shopBase.transform.Find("ShopItem_price_upgrade");
+        _userBuilding.UpgradeAvailable = upgradeMode;
         var colorFinal = upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
         var colorInitial = !upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
 
-        upgradePriceText.GetComponent<ColorFade>().FadeToColor(colorInitial, colorFinal, typeof(TextMeshProUGUI));
+        _upgradePriceTextColorFade.FadeToColor(colorInitial, colorFinal, typeof(TextMeshProUGUI));
     }
 
 
     private void Buy()
     {
-        var building = GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index];
-        if (GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buy(building))
+        if (_user.Buy(_userBuilding))
         {
-            GetComponent<AudioSource>().PlayOneShot(Bought);
-            TurnUpdateModeIfNecessary();
+            _audioSource.PlayOneShot(_bought);
+            TurnUpgradeModeIfNecessary();
         }
         else
-            GetComponent<AudioSource>().PlayOneShot(NotEnoughMoney);
+            _audioSource.PlayOneShot(_notEnoughMoney);
     }
 
     private void BuyUpgrade()
     {
-        var building = GameObject.Find("DataStorage").GetComponent<DataStorage>().user.Buildings[index];
-        if (GameObject.Find("DataStorage").GetComponent<DataStorage>().user.BuyUpgrade(building))
+        if (_user.BuyUpgrade(_userBuilding))
         {
-            var shopBase = transform.Find("ShopItem_base").transform;
-            shopBase.Find("ShopItem_price_upgrade").GetComponent<TextMeshProUGUI>().text =
-                utilies.NumberToFormattedString(building.CalculateUpgradeCost());
-            shopBase.Find("ShopItem_version").GetComponent<TextMeshProUGUI>().text = "lv." + building.Version;
-
-            GetComponent<AudioSource>().PlayOneShot(Bought);
-            TurnUpdateModeIfNecessary();
+            TurnUpgradeModeIfNecessary();
+            _audioSource.PlayOneShot(_bought);
         }
         else
-        {
-            GetComponent<AudioSource>().PlayOneShot(NotEnoughMoney);
-            Debug.Log("NotEnough Logs for upgrade!()");
-        }
+            _audioSource.PlayOneShot(_notEnoughMoney);
     }
 }

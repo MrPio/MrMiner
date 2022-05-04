@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class PopulateScrollView : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
-        int index = 0;
+        var index = 0;
         foreach (var building in WoodBuildings.Buildings)
             building.InstantiateGameObject(Instantiate(
-                Resources.Load<GameObject>("Prefabs/ShopItem"),
-                GameObject.Find("Content").transform, false),index++
+                    Resources.Load<GameObject>("Prefabs/ShopItem"),
+                    GameObject.Find("Content").transform, false), index++
             );
     }
 }
