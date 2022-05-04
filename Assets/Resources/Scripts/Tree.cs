@@ -11,7 +11,7 @@ public class Tree : MonoBehaviour
     public GameObject dropLog;
     public AnimationCurve clickSpeedToLeafSpeed, clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
-    
+
     private Animator _anim;
     private readonly ArrayList _clicks = new();
     private long _lastClick;
@@ -24,7 +24,7 @@ public class Tree : MonoBehaviour
     private static readonly int Bounce2Start = Animator.StringToHash("Bounce2Start");
     private static readonly int Speed = Animator.StringToHash("speed");
     private Camera _camera;
-    private User _user;
+    [SerializeField] public DataStorage dataStorage;
     private static readonly int Bounce = Animator.StringToHash("Bounce");
     private Animator _headerLogValueAnimator;
 
@@ -51,7 +51,6 @@ public class Tree : MonoBehaviour
         };
         _anim = GetComponent<Animator>();
         _camera = Camera.main;
-        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
         _headerLogValueAnimator = GameObject.Find("Header_log_value").GetComponent<Animator>();
     }
 
@@ -93,7 +92,7 @@ public class Tree : MonoBehaviour
 
         Effect.ClickEffect(_camera.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#76E573"));
         Effect.SpawnFloatingText(Input.mousePosition,
-            _user.ClickPower,
+            dataStorage.user.ClickPower,
             _clicks.Count > 1 ? clickSpeedToFloatingSpeed.Evaluate(_clickCurrentSpeed) : 2f);
 
         if (Random.Range(0f, 1f) < dropChance)
@@ -106,7 +105,7 @@ public class Tree : MonoBehaviour
         else
             PlaySound(_rustleAudioClip);
 
-        _user.EarnClick();
+        dataStorage.user.EarnClick();
         _headerLogValueAnimator.SetTrigger(Bounce);
     }
 

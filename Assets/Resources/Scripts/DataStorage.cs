@@ -14,14 +14,13 @@ public class DataStorage : MonoBehaviour
         else
             Debug.Log("User loaded from save data!");
 
-        user.CalculateLps();
-        user.CalculateClickPower();
-
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
         {
+            shopItem.GetComponent<ShopItem>().Start();
             shopItem.GetComponent<ShopItem>().TurnAvailability(true);
             shopItem.GetComponent<ShopItem>().TurnUpgradeModeIfNecessary();
         }
+        user.UpdateUI();
     }
 
     private void InitializeUser()

@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class LpsCps : MonoBehaviour
 {
-    [Range(10, 120)] public int fps;
-    
+    [Range(1, 120)] public int fps = 60;
+
     private float _startTime;
-    private float _passedSecond ;
-    private User _user;
+    private float _passedSecond;
+    [SerializeField] public DataStorage dataStorage;
     private readonly List<ShopItem> _shopItems = new();
 
     private void Start()
     {
-        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
             _shopItems.Add(shopItem.GetComponent<ShopItem>());
-
+        Debug.Log("_shopItems--->" + _shopItems.Count);
         _startTime = Time.time;
     }
 
@@ -24,7 +23,7 @@ public class LpsCps : MonoBehaviour
         if (Time.time - _startTime > 1f / fps)
         {
             _startTime = Time.time;
-            _user.EarnLps(fps);
+            dataStorage.user.EarnLps(fps);
 
             _passedSecond += 1f / fps;
             if (_passedSecond >= 0.5f)

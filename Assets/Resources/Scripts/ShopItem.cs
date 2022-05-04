@@ -35,17 +35,16 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     private AudioSource _audioSource;
     private TextMeshProUGUI _shopItemPriceUpgradeText;
     private TextMeshProUGUI _shopItemVersionText;
-    private User _user;
-    private Building _userBuilding;
+    private DataStorage _dataStorage;
     private ColorFade _upgradePriceTextColorFade;
     private ColorFade _shopAvailabilityColorFade;
     private ColorFade _priceTextColorFade;
     private Animator _animator;
 
-    private void Start()
+    public void Start()
     {
-        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
-        _userBuilding = _user.Buildings[index];
+        _dataStorage = GameObject.FindGameObjectWithTag("DataStorage").GetComponent<DataStorage>();
+        _shopBase = transform.Find("ShopItem_base");
         _mouseDownAudioClip = Resources.Load("Raws/click_down_003") as AudioClip;
         _mouseUpAudioClip = Resources.Load("Raws/click_up_002") as AudioClip;
         _bought = Resources.Load("Raws/buy") as AudioClip;
@@ -53,7 +52,6 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
         _charge = Resources.Load("Raws/charge_01") as AudioClip;
         _onPressAnimationScale = 1 / onPressAnimationDuration;
         _shopBaseInitialLocalPosY = _shopBase.localPosition.y;
-        _shopBase = transform.Find("ShopItem_base");
         _shopItemHoldImage = shopItemHold.GetComponent<Image>();
         _shopItemHoldRectTransform = shopItemHold.GetComponent<RectTransform>();
         _audioSource = GetComponent<AudioSource>();
@@ -167,23 +165,23 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     public void TurnUpgradeModeIfNecessary()
     {
-        _shopItemPriceUpgradeText.text = utilies.NumToStr(_userBuilding.CalculateUpgradeCost());
-        _shopItemVersionText.text = "lv." + _userBuilding.Version;
-        
-        if (_updateMode == _userBuilding.CheckForUpgrade())
+        _shopItemPriceUpgradeText.text = utilies.NumToStr(_dataStorage.user.Buildings[index].CalculateUpgradeCost());
+        _shopItemVersionText.text = "lv." + _dataStorage.user.Buildings[index].Version;
+
+        if (_updateMode == _dataStorage.user.Buildings[index].CheckForUpgrade())
             return;
-        
+
         _updateMode = !_updateMode;
-        _animator.SetTrigger(_updateMode?"Open":"Close");
+        _animator.SetTrigger(_updateMode ? "Open" : "Close");
     }
 
     public void TurnAvailability(bool force = false)
     {
-        var mode = BigInteger.Compare(_user.Logs, _userBuilding.CurrentCost) >= 0;
-        if (!force && _userBuilding.BuildingAvailable == mode)
+        var mode = BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.Buildings[index].CurrentCost) >= 0;
+        if (!force && _dataStorage.user.Buildings[index].BuildingAvailable == mode)
             return;
 
-        _userBuilding.BuildingAvailable = mode;
+        _dataStorage.user.Buildings[index].BuildingAvailable = mode;
 
         var colorFinal = mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
         var colorInitial = !mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
@@ -196,15 +194,16 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     public void TurnUpgradeAvailability(bool force = false)
     {
-        if (!_userBuilding.CheckForUpgrade())
+        if (!_dataStorage.user.Buildings[index].CheckForUpgrade())
             return;
 
-        var upgradeMode = BigInteger.Compare(_user.Logs, _userBuilding.CalculateUpgradeCost()) >= 0;
+        var upgradeMode =
+            BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.Buildings[index].CalculateUpgradeCost()) >= 0;
 
-        if (!force && _userBuilding.UpgradeAvailable == upgradeMode)
+        if (!force && _dataStorage.user.Buildings[index].UpgradeAvailable == upgradeMode)
             return;
 
-        _userBuilding.UpgradeAvailable = upgradeMode;
+        _dataStorage.user.Buildings[index].UpgradeAvailable = upgradeMode;
         var colorFinal = upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
         var colorInitial = !upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
 
@@ -214,7 +213,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     private void Buy()
     {
-        if (_user.Buy(_userBuilding))
+        if (_dataStorage.user.Buy(_dataStorage.user.Buildings[index]))
         {
             _audioSource.PlayOneShot(_bought);
             TurnUpgradeModeIfNecessary();
@@ -225,7 +224,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     private void BuyUpgrade()
     {
-        if (_user.BuyUpgrade(_userBuilding))
+        if (_dataStorage.user.BuyUpgrade(_dataStorage.user.Buildings[index]))
         {
             TurnUpgradeModeIfNecessary();
             _audioSource.PlayOneShot(_bought);

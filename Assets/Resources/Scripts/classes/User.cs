@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 [Serializable]
 public class User
@@ -18,10 +16,8 @@ public class User
     public BigInteger Coins { get; }
     public DateTime ProfileCreated { get; }
     public DateTime LastAutosave { get; private set; }
-    public BigInteger ClickPower { get; private set; }
     public List<Building> Buildings;
-    public double Lps { get; private set; }
-    public double Cps { get; private set; }
+    public List<Store> Stores;
     public List<TextMeshProUGUI> shopItemValueText, shopItemPriceText;
 
     private int _clickVersionLog, _clickVersionCoin;
@@ -35,14 +31,15 @@ public class User
         Logs = new BigInteger(0);
         Coins = new BigInteger(0);
         ProfileCreated = DateTime.Now;
-        Lps = 0;
-        Cps = 0;
-        ClickPower = 1;
         _lpsPerc = 0;
         _cpsPerc = 0;
+        Logs = BigInteger.Zero;
         Buildings = new List<Building>();
+        Stores = new List<Store>();
         foreach (var building in WoodBuildings.Buildings)
             Buildings.Add(building);
+        foreach (var store in CoinBuildings.Stores)
+            Stores.Add(store);
         _clickVersionLog = 0;
         _clickVersionCoin = 0;
         shopItemValueText = new List<TextMeshProUGUI>();
@@ -73,20 +70,20 @@ public class User
         return user;
     }
 
-    public void CalculateLps()
-    {
-        Lps = 0;
-        foreach (var building in Buildings)
-            Lps += building.CalculateLps();
-        UpdateUI();
-    }
+    public double Lps => Buildings.Sum(building => building.Lps);
+    public double Cps => Stores.Sum(store => store.Cps);
 
-    public void CalculateClickPower()
+    public BigInteger ClickPower
     {
-        CalculateLps();
-        ClickPower = BigInteger.Multiply(BigInteger.Pow(new BigInteger(2), _clickVersionLog),
-            new BigInteger(Lps * _lpsPerc));
-        ClickPower = BigInteger.Add(ClickPower, new BigInteger(1000));
+        get
+        {
+            var clickPower = BigInteger.Add(
+                BigInteger.Pow(new BigInteger(2), _clickVersionLog),
+                new BigInteger(Lps * _lpsPerc)
+            );
+            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            return clickPower;
+        }
     }
 
     public void EarnLps(int fps)
@@ -109,18 +106,16 @@ public class User
         UpdateUI();
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
-        var stopWatch = new Stopwatch();
-        stopWatch.Start();
-
         GameObject.Find("Header_log_value").GetComponent<TextMeshProUGUI>().text =
             utilies.NumToStr(Logs);
         GameObject.Find("Header_lps").GetComponent<TextMeshProUGUI>().text =
             utilies.DoubleToStr(Lps) + " lps";
-
-        stopWatch.Stop();
-        //Debug.Log("UI updated in: " + stopWatch.ElapsedTicks + "ticks =1/10 nano");
+        /*GameObject.Find("Header_coin_value").GetComponent<TextMeshProUGUI>().text =
+            utilies.NumToStr(Coins);
+        GameObject.Find("Header_cps").GetComponent<TextMeshProUGUI>().text =
+            utilies.DoubleToStr(Cps) + " lps";*/
     }
 
     public bool Buy(Building building)
@@ -133,7 +128,6 @@ public class User
             GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
             building.Buy();
-            CalculateLps();
 
             shopItemValueText.ElementAt(Buildings.IndexOf(building)).text = building.Count.ToString();
             shopItemPriceText.ElementAt(Buildings.IndexOf(building)).text = utilies.NumToStr(building.CurrentCost);
@@ -153,19 +147,9 @@ public class User
             GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
             building.Upgrade();
-            CalculateLps();
-
             return true;
         }
 
         return false;
-    }
-
-    public override string ToString()
-    {
-        return $"{nameof(_clickVersionLog)}: {_clickVersionLog}, {nameof(_clickVersionCoin)}: {_clickVersionCoin}," +
-               $" {nameof(_lpsPerc)}: {_lpsPerc}, {nameof(_cpsPerc)}: {_cpsPerc}, {nameof(Logs)}: {Logs}," +
-               $" {nameof(Coins)}: {Coins}, {nameof(ProfileCreated)}: {ProfileCreated}, {nameof(LastAutosave)}: {LastAutosave}," +
-               $" {nameof(ClickPower)}: {ClickPower}, {nameof(Lps)}: {Lps}, {nameof(Cps)}: {Cps}";
     }
 }

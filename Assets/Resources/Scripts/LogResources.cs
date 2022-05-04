@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using utiles;
@@ -13,6 +14,8 @@ public class LogResources : MonoBehaviour
     public AnimationCurve moveCurveX, moveCurveY, rotateCurveZ;
     [Range(0.001f, 1f)] public float speed = .5f;
     public float finalPosY = 1.2f;
+    private DataStorage _dataStorage;
+    private AudioSource _audioSource;
 
     private float _timeStart;
     private Vector2 _startPoint;
@@ -21,8 +24,6 @@ public class LogResources : MonoBehaviour
     private float _finalPosX;
     private BigInteger _value;
     private Camera _camera;
-    private User _user;
-    private AudioSource _audioSource;
     private AudioClip _badge;
     private Animator _headerLogValueAnimator;
     private ColorFade _headerLogValueColorFade;
@@ -31,11 +32,11 @@ public class LogResources : MonoBehaviour
     private void Start()
     {
         _camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
         _audioSource = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>();
         _badge = Resources.Load("Raws/badge") as AudioClip;
         _headerLogValueAnimator = GameObject.Find("Header_log_value").GetComponent<Animator>();
         _headerLogValueColorFade = GameObject.Find("Header_log_value").GetComponent<ColorFade>();
+        _dataStorage = GameObject.FindGameObjectWithTag("DataStorage").GetComponent<DataStorage>();
 
         _left = Random.Range(0f, 1f) < .5f;
         var spawnZone = GameObject.Find(_left ? "LogSpawnZone_001" : "LogSpawnZone_002");
@@ -49,7 +50,7 @@ public class LogResources : MonoBehaviour
 
         var scale = Random.Range(0.8f, 1.2f);
         transform.localScale *= scale;
-        _value = new BigInteger((double) _user.ClickPower * 4f * Math.Pow(scale, 1.6f));
+        _value = new BigInteger((double) _dataStorage.user.ClickPower * 4f * Math.Pow(scale, 1.6f));
 
         _timeStart = Time.time;
     }
@@ -89,7 +90,7 @@ public class LogResources : MonoBehaviour
         _headerLogValueAnimator.SetTrigger(Bounce);
         _headerLogValueColorFade
             .FadeToColor(Color.white, utilies.HexToColor("#FFFD73"), typeof(TextMeshProUGUI));
-        _user.EarnClick(_value);
+        _dataStorage.user.EarnClick(_value);
         Effect.SpawnFloatingText(Input.mousePosition, _value, 1.6f);
         Destroy(gameObject);
     }

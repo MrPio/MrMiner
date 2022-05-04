@@ -381,6 +381,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   dropChance: 0.5
+  dataStorage: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
 --- !u!60 &9181060333622587447
 PolygonCollider2D:
   m_ObjectHideFlags: 0

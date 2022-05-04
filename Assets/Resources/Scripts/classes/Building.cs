@@ -11,8 +11,7 @@ public class Building
 {
     public int Version { get; private set; }
     public int Count { get; private set; }
-    public BigInteger CurrentCost { get; private set; }
-    private string Color { get; set; }
+    private string Color { get; }
     private BigInteger UpgradeBaseCost { get; }
     public bool BuildingAvailable, UpgradeAvailable;
 
@@ -32,7 +31,6 @@ public class Building
         Count = 0;
         Color = colorHex;
         UpgradeBaseCost = upgradeBaseCost;
-        SetCurrentCost();
     }
 
     public void Upgrade()
@@ -59,20 +57,11 @@ public class Building
     public void Buy()
     {
         ++Count;
-        SetCurrentCost();
     }
 
-    private void SetCurrentCost()
-    {
-        CurrentCost = new BigInteger((double) BaseCost * Math.Pow(1.15f, Count));
-    }
+    public  BigInteger CurrentCost => new((double) BaseCost * Math.Pow(1.15f, Count));
 
-    public double CalculateLps()
-    {
-        var lps = BaseLps * Count;
-        lps *= Mathf.Pow(2, Version);
-        return lps;
-    }
+    public double Lps => BaseLps * Count*Mathf.Pow(2, Version);
 
     public GameObject InstantiateGameObject(GameObject building, int index)
     {

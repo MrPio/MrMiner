@@ -3,13 +3,10 @@ using UnityEngine;
 public class Autosave : MonoBehaviour
 {
     [Range(1, 600)] public int intervalSeconds = 4;
-
-    private User _user;
-    private float _startTime;
+    [SerializeField] public DataStorage dataStorage;    private float _startTime;
 
     private void Start()
     {
-        _user = GameObject.Find("DataStorage").GetComponent<DataStorage>().user;
         _startTime = Time.time;
     }
 
@@ -18,7 +15,7 @@ public class Autosave : MonoBehaviour
         if (Time.time - _startTime > intervalSeconds)
         {
             _startTime = Time.time;
-            _user.Save();
+            dataStorage.user.Save();
         }
     }
 }
