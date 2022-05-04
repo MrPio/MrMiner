@@ -32,7 +32,8 @@ namespace utiles
         public static void SpawnFloatingText(Vector2 position, BigInteger value, float duration,
             string color = "#8EFF7C")
         {
-            var floating = Instantiate(Resources.Load<GameObject>("Prefabs/Floating"),
+            var floating = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Floating"),
                 position, Quaternion.identity,
                 GameObject.Find("Canvas").transform);
             floating.GetComponent<FloatingText>().duration = duration;

@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using utiles;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class LogResources : MonoBehaviour
 {
@@ -17,6 +21,7 @@ public class LogResources : MonoBehaviour
     private bool _left;
     private float _totalAngle;
     private float _finalPosX;
+    private BigInteger _value;
 
     void Start()
     {
@@ -30,7 +35,10 @@ public class LogResources : MonoBehaviour
         _finalPosX = _left ? -_finalPosX : _finalPosX;
         finalPosY += Random.Range(-0.3f, 0.3f);
 
-        transform.localScale *= Random.Range(0.8f, 1.2f);
+        var scale = Random.Range(0.8f, 1.2f);
+        transform.localScale *= scale;
+        _value = new BigInteger((double) GameObject.Find("DataStorage").GetComponent<DataStorage>().user.ClickPower *
+                                4f * scale);
 
         _timeStart = Time.time;
     }
@@ -38,9 +46,9 @@ public class LogResources : MonoBehaviour
     void Update()
     {
         var t = Time.time - _timeStart;
-        if(t * speed>1)
+        if (t * speed > 1)
             return;
-        
+
         var pos = new Vector3(
             _startPoint.x + (_finalPosX - _startPoint.x) * moveCurveX.Evaluate(t * speed),
             _startPoint.y + (finalPosY - _startPoint.y) * moveCurveY.Evaluate(t * speed),
@@ -67,9 +75,12 @@ public class LogResources : MonoBehaviour
     {
         GameObject.Find("Main Camera").GetComponent<AudioSource>()
             .PlayOneShot(Resources.Load("Raws/badge") as AudioClip);
-        Effect.ClickEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition),utilies.HexToColor("#F8DB95"));
+        Effect.ClickEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#F8DB95"));
         GameObject.Find("Header_log_value").GetComponent<Animator>().SetTrigger("Bounce");
-        GameObject.Find("Header_log_value").GetComponent<ColorFade>().FadeToColor(utilies.HexToColor("#FFFD73"), typeof(TextMeshProUGUI));
+        GameObject.Find("Header_log_value").GetComponent<ColorFade>()
+            .FadeToColor(Color.white, utilies.HexToColor("#FFFD73"), typeof(TextMeshProUGUI));
+        GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnClick(_value);
+        Effect.SpawnFloatingText(Input.mousePosition, _value, 1.6f);
         Destroy(gameObject);
     }
 }

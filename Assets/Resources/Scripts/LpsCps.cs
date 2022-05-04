@@ -23,9 +23,9 @@ public class LpsCps : MonoBehaviour
             GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnLps(Fps);
             
             passedSecond += 1f / Fps;
-            if (passedSecond >= 1)
+            if (passedSecond >= 0.5f)
             {
-                passedSecond -= 1;
+                passedSecond -= 0.5f;
                 foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
                     shopItem.GetComponent<ShopItem>().TurnAvailability();
             }

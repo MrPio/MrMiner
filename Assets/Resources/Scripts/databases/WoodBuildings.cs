@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 
 
-public class WoodBuildings
+public abstract class WoodBuildings
 {
     public static readonly Building[] Buildings =
     {
@@ -34,4 +34,9 @@ public class WoodBuildings
         new("Creator", BigInteger.Parse("170000000000000"), "#545454", 430000000f, "Sprites/BuildingsWood/13_Creator",
             BigInteger.Parse("1700000000000000"))
     };
+
+    public static readonly int[] CostMultiply = {1, 5, 10, 100, 100, 100, 1000, 1000, 1000, 1000, 10000};
+    public static readonly int[] RequiredProgress = {1, 5, 25, 50, 100, 150, 200, 250, 300, 350, 400};
+    public static readonly int[] CostMultiplyFist = {1, 5, 20, 10, 100, 10, 10, 10, 1000, 1000, 1000, 1000};
+    public static readonly int[] RequiredProgressFist = {1, 1, 5, 25, 50, 100, 150, 200, 250, 300, 350, 400};
 }

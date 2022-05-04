@@ -11,7 +11,7 @@ public class Tree : MonoBehaviour
     [SerializeField] public GameObject leaf;
     [SerializeField] public GameObject dropLog;
     private Animator _anim;
-    public AnimationCurve clickSpeedToLeafSpeed,clickSpeedToFloatingSpeed;
+    public AnimationCurve clickSpeedToLeafSpeed, clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
 
     private readonly ArrayList _clicks = new();
@@ -87,9 +87,11 @@ public class Tree : MonoBehaviour
             _anim.SetFloat("speed", 0.6f);
         }
 
-        var leafObj = Instantiate(leaf);
-        leafObj.GetComponent<LeafDrop>().speed =
-            _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed) : 0.3f;
+        //Leafs drop
+        var leafDropSpeed = _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed) : 0.3f;
+        for (int i = -1; i < (int) (leafDropSpeed / 0.6f); i++)
+            Instantiate(leaf).GetComponent<LeafDrop>().speed = leafDropSpeed;
+
         Effect.ClickEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#76E573"));
         Effect.SpawnFloatingText(Input.mousePosition,
             GameObject.Find("DataStorage").GetComponent<DataStorage>().user.ClickPower,
@@ -98,9 +100,9 @@ public class Tree : MonoBehaviour
         if (Random.Range(0f, 1f) < dropChance)
         {
             PlaySound(_dropLogAudioClip);
-            var log=Instantiate(dropLog);
+            var log = Instantiate(dropLog);
             log.GetComponent<LogResources>().speed =
-                _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed)+0.1f : 0.4f;
+                _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed) + 0.1f : 0.4f;
         }
         else
             PlaySound(_rustleAudioClip);

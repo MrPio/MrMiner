@@ -21,8 +21,11 @@ public class  DataStorage : MonoBehaviour
 
             user.CalculateLps();
             user.CalculateClickPower();
-            
+
             foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
+            {
                 shopItem.GetComponent<ShopItem>().TurnAvailability(true);
+                shopItem.GetComponent<ShopItem>().TurnUpdateModeIfNecessary();
+            }
         }
     }

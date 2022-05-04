@@ -42,17 +42,28 @@ public class Building
         UpgradeBaseCost = upgradeBaseCost;
     }
 
-    public static bool IsAvailable(int index)
-    {
-        var shopItem = GameObject.FindGameObjectsWithTag("ShopItem");
-        var shopBase = shopItem[index].transform.Find("ShopItem_base");
-        var shopAvailability = shopBase.Find("ShopItem_availability");
-        return !shopAvailability.gameObject.activeSelf;
-    }
-
     public void Upgrade()
     {
         ++Version;
+    }
+
+    public bool CheckForUpgrade()
+    {
+        var upgradesAvailable = 0;
+        var requirements = Name == "Mighty Fist" ? WoodBuildings.RequiredProgressFist : WoodBuildings.RequiredProgress;
+        foreach (var requirement in requirements)
+            if (upgradesAvailable >= requirement)
+                ++upgradesAvailable;
+        return upgradesAvailable > Version;
+    }
+
+    public BigInteger CalculateUpgradeCost()
+    {
+        var cost = UpgradeBaseCost;
+        var costs = Name == "Mighty Fist" ? WoodBuildings.CostMultiplyFist : WoodBuildings.CostMultiply;
+        for (int i = 0; i < Version + 1; i++)
+            cost = BigInteger.Multiply(cost, new BigInteger(costs[i]));
+        return cost;
     }
 
     public void Buy()

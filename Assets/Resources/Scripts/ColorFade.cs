@@ -16,7 +16,7 @@ public class ColorFade : MonoBehaviour
     private bool _animationDone = true;
     private Type _type;
     private bool _goBack;
-    public AnimationCurve curve=AnimationCurve.Linear(0,0,1,1);
+    public AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
 
     void Start()
     {
@@ -37,14 +37,11 @@ public class ColorFade : MonoBehaviour
             _animationDone = true;
     }
 
-    public void FadeToColor(Color color, Type type)
+    public void FadeToColor(Color initialColor, Color color, Type type)
     {
         _color = color;
         _type = type;
-        if (type == typeof(Image))
-            _initialColor = GetComponent<Image>().color;
-        else if (type == typeof(TextMeshProUGUI))
-            _initialColor = GetComponent<TextMeshProUGUI>().color;
+        _initialColor = initialColor;
         _startTime = Time.time;
         _animationDone = false;
     }
