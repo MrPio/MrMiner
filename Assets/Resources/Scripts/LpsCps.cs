@@ -14,20 +14,22 @@ public class LpsCps : MonoBehaviour
         _startTime = Time.time;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Time.time - _startTime > 1f / Fps)
         {
             _startTime = Time.time;
             GameObject.Find("DataStorage").GetComponent<DataStorage>().user.EarnLps(Fps);
-            
+
             passedSecond += 1f / Fps;
             if (passedSecond >= 0.5f)
             {
                 passedSecond -= 0.5f;
                 foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
+                {
                     shopItem.GetComponent<ShopItem>().TurnAvailability();
+                    shopItem.GetComponent<ShopItem>().TurnUpgradeAvailability();
+                }
             }
         }
     }

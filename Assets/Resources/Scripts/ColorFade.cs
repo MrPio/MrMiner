@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ColorFade : MonoBehaviour
@@ -32,7 +29,7 @@ public class ColorFade : MonoBehaviour
         if (_type == typeof(Image))
             GetComponent<Image>().color = color;
         else if (_type == typeof(TextMeshProUGUI))
-            GetComponent<TextMeshProUGUI>().color = color;
+                GetComponent<TextMeshProUGUI>().color = color;
         if (t > 1)
             _animationDone = true;
     }

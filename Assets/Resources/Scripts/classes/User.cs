@@ -24,6 +24,7 @@ public class User
     public double Cps { get; private set; }
 
     private int _clickVersionLog, _clickVersionCoin, _lpsPerc, _cpsPerc;
+    private double _lpsRest, _cpsRest;
 
 
     public User()
@@ -88,7 +89,9 @@ public class User
 
     public void EarnLps(int fps)
     {
-        Logs = BigInteger.Add(Logs, new BigInteger(Lps / fps));
+        Logs = BigInteger.Add(Logs, new BigInteger(Lps / fps + _lpsRest));
+        _lpsRest += Lps / fps - Math.Truncate(Lps / fps);
+        _lpsRest -= Math.Truncate(_lpsRest);
         UpdateUI();
     }
 
@@ -140,7 +143,7 @@ public class User
 
         return false;
     }
-    
+
     public bool BuyUpgrade(Building building)
     {
         if (building.CheckForUpgrade() && Logs >= building.CalculateUpgradeCost())

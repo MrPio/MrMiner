@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
@@ -25,7 +26,8 @@ public class Building
     public string Color { get; private set; }
     public BigInteger UpgradeBaseCost { get; }
 
-    public bool available;
+    public bool buildingAvailable,upgradeAvailable;
+    
 
     public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo,
         BigInteger upgradeBaseCost)
@@ -49,11 +51,10 @@ public class Building
 
     public bool CheckForUpgrade()
     {
-        var upgradesAvailable = 0;
         var requirements = Name == "Mighty Fist" ? WoodBuildings.RequiredProgressFist : WoodBuildings.RequiredProgress;
-        foreach (var requirement in requirements)
-            if (upgradesAvailable >= requirement)
-                ++upgradesAvailable;
+        var upgradesAvailable = requirements.Count(requirement => Count >= requirement);
+        if(upgradesAvailable>Version)
+            Debug.Log("New Upgrade Available!");
         return upgradesAvailable > Version;
     }
 

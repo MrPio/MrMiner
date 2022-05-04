@@ -13,7 +13,6 @@ public class Autosave : MonoBehaviour
         _startTime = Time.time;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Time.time-_startTime > IntervalSeconds)
