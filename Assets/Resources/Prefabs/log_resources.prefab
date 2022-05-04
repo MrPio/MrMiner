@@ -543,8 +543,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   speed: 1
-  finalPosY: 0
-  dataStorage: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
+  finalPosY: 0.2
 --- !u!95 &7554175134870530751
 Animator:
   serializedVersion: 4

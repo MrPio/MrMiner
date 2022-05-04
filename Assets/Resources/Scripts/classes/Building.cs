@@ -85,12 +85,13 @@ public class Building
             utilies.NumToStr(CurrentCost);
         shopBase.transform.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = Count.ToString();
         shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = logo;
+        
         var xScaleFactor = logo.bounds.size.x / logo.bounds.size.y / 0.942445993f;
         var rect = shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().rect;
         rect.width *= xScaleFactor;
         shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta =
             new Vector2(rect.width, rect.height);
-
+        //TODO QUESTE MODIFICHE NON VENGONO FATTEEEEE
         shopBase.transform.Find("ShopItem_version").GetComponent<TextMeshProUGUI>().text = "lv." + Version;
 
         return building;

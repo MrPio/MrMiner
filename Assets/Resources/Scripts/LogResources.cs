@@ -50,7 +50,7 @@ public class LogResources : MonoBehaviour
 
         var scale = Random.Range(0.8f, 1.2f);
         transform.localScale *= scale;
-        _value = new BigInteger((double) _dataStorage.user.ClickPower * 4f * Math.Pow(scale, 1.6f));
+        _value = new BigInteger((double) _dataStorage.user.ClickPower * 6f * Math.Pow(scale, 2f));
 
         _timeStart = Time.time;
     }

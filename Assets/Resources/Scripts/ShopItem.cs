@@ -13,6 +13,8 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     private static AudioClip _notEnoughMoney;
     private static AudioClip _bought;
     private static AudioClip _charge;
+    private static AudioClip _updateOn;
+    private static AudioClip _updateOff;
 
     public float downTimeForUpdate = 1;
     public GameObject shopItemHold;
@@ -50,6 +52,8 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
         _bought = Resources.Load("Raws/buy") as AudioClip;
         _notEnoughMoney = Resources.Load("Raws/fx_no_buy") as AudioClip;
         _charge = Resources.Load("Raws/charge_01") as AudioClip;
+        _updateOn = Resources.Load("Raws/upgrade_01") as AudioClip;
+        _updateOff = Resources.Load("Raws/upgrade_02") as AudioClip;
         _onPressAnimationScale = 1 / onPressAnimationDuration;
         _shopBaseInitialLocalPosY = _shopBase.localPosition.y;
         _shopItemHoldImage = shopItemHold.GetComponent<Image>();
@@ -173,6 +177,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
         _updateMode = !_updateMode;
         _animator.SetTrigger(_updateMode ? "Open" : "Close");
+        _audioSource.PlayOneShot(_updateMode ? _updateOn : _updateOff);
     }
 
     public void TurnAvailability(bool force = false)

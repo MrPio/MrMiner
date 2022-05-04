@@ -325,7 +325,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285726706
+    rgba: 5987163
   m_fontColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1066,7 +1066,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   onPressAnimationDuration: 0.06
   index: 0
-  dataStorage: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
 --- !u!222 &3658446906527320900
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1392,7 +1391,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2eb5f7f7dba318843a18dc476a0031f8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 66aaead5f383154439cff2f9535bb628, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
