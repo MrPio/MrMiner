@@ -41,18 +41,18 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherUtils.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\AnalyticsHelper.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\AssemblyInfo.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherSettingsManager.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherWindow.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Localization\Localization.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherBuildProcessor.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Redux\Store.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Redux\Middleware.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Examples\PublisherExamples.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Redux\AppState.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherWindow.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherSettingsManager.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\PublisherUtils.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\AssemblyInfo.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Redux\Middleware.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Redux\Reducer.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Redux\Store.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Examples\PublisherExamples.cs" />
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\AnalyticsHelper.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\UIElementsUtils.cs" />
      <None Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\Unity.Play.Publisher.Editor.asmdef" />
      <Reference Include="UnityEngine">
@@ -328,6 +328,9 @@
      <Reference Include="unityplastic">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.collab-proxy@1.13.5/Lib/Editor/PlasticSCM/unityplastic.dll</HintPath>
      </Reference>
+     <Reference Include="System.IO.Compression.FileSystem">
+     <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.connect.share@4.2.3/Plugins/System.IO.Compression.FileSystem.dll</HintPath>
+     </Reference>
      <Reference Include="Unity.Burst.Unsafe">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.burst@1.6.0/Unity.Burst.Unsafe.dll</HintPath>
      </Reference>
@@ -354,9 +357,6 @@
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
-     </Reference>
-     <Reference Include="System.IO.Compression.FileSystem">
-     <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.connect.share@4.2.3/Plugins/System.IO.Compression.FileSystem.dll</HintPath>
      </Reference>
      <Reference Include="nunit.framework">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>

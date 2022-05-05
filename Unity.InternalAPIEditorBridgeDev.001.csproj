@@ -41,9 +41,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\InternalBridge\LocalizationDatabaseBridge.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\InternalBridge\AssemblyInfo.cs" />
      <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\InternalBridge\UnityConnectSession.cs" />
-     <Compile Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\InternalBridge\LocalizationDatabaseBridge.cs" />
      <None Include="Library\PackageCache\com.unity.connect.share@4.2.3\Editor\InternalBridge\InternalBridge.asmdef" />
      <Reference Include="UnityEngine">
      <HintPath>C:/Program Files/Unity 2021.2.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -318,6 +318,9 @@
      <Reference Include="unityplastic">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.collab-proxy@1.13.5/Lib/Editor/PlasticSCM/unityplastic.dll</HintPath>
      </Reference>
+     <Reference Include="System.IO.Compression.FileSystem">
+     <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.connect.share@4.2.3/Plugins/System.IO.Compression.FileSystem.dll</HintPath>
+     </Reference>
      <Reference Include="Unity.Burst.Unsafe">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.burst@1.6.0/Unity.Burst.Unsafe.dll</HintPath>
      </Reference>
@@ -344,9 +347,6 @@
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
-     </Reference>
-     <Reference Include="System.IO.Compression.FileSystem">
-     <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.connect.share@4.2.3/Plugins/System.IO.Compression.FileSystem.dll</HintPath>
      </Reference>
      <Reference Include="nunit.framework">
      <HintPath>C:/Users/valer/Desktop/MrMiner/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
