@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
 
@@ -16,9 +17,9 @@ public class User
     public BigInteger Coins { get; }
     public DateTime ProfileCreated { get; }
     public DateTime LastAutosave { get; private set; }
-    public List<Building> Buildings;
-    public List<Store> Stores;
-    public List<TextMeshProUGUI> shopItemValueText, shopItemPriceText;
+    public List<Building> buildings;
+    public List<Store> stores;
+    [NonSerialized] public List<TextMeshProUGUI> ShopItemValueText = new(), ShopItemPriceText = new();
 
     private int _clickVersionLog, _clickVersionCoin;
     private int _lpsPerc, _cpsPerc;
@@ -34,16 +35,14 @@ public class User
         _lpsPerc = 0;
         _cpsPerc = 0;
         Logs = BigInteger.Zero;
-        Buildings = new List<Building>();
-        Stores = new List<Store>();
+        buildings = new List<Building>();
+        stores = new List<Store>();
         foreach (var building in WoodBuildings.Buildings)
-            Buildings.Add(building);
+            buildings.Add(building);
         foreach (var store in CoinBuildings.Stores)
-            Stores.Add(store);
+            stores.Add(store);
         _clickVersionLog = 0;
         _clickVersionCoin = 0;
-        shopItemValueText = new List<TextMeshProUGUI>();
-        shopItemPriceText = new List<TextMeshProUGUI>();
     }
 
     public void Save()
@@ -66,12 +65,11 @@ public class User
         var file = File.Open(path, FileMode.Open);
         var user = (User) new BinaryFormatter().Deserialize(file);
         file.Close();
-        user.UpdateUI();
         return user;
     }
 
-    public double Lps => Buildings.Sum(building => building.Lps);
-    public double Cps => Stores.Sum(store => store.Cps);
+    public double Lps => buildings.Sum(building => building.Lps);
+    public double Cps => stores.Sum(store => store.Cps);
 
     public BigInteger ClickPower
     {
@@ -118,6 +116,16 @@ public class User
             utilies.DoubleToStr(Cps) + " lps";*/
     }
 
+    public void UpdateBuildUI()
+    {
+        var count = 0;
+        foreach (var building in buildings)
+        {
+            ShopItemValueText[count].text = building.Count.ToString();
+            ShopItemPriceText[count++].text = utilies.NumToStr(building.CurrentCost);
+        }
+    }
+
     public bool Buy(Building building)
     {
         if (Logs >= building.CurrentCost)
@@ -128,9 +136,7 @@ public class User
             GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
             building.Buy();
-
-            shopItemValueText.ElementAt(Buildings.IndexOf(building)).text = building.Count.ToString();
-            shopItemPriceText.ElementAt(Buildings.IndexOf(building)).text = utilies.NumToStr(building.CurrentCost);
+            UpdateBuildUI();
             return true;
         }
 

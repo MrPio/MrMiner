@@ -11,11 +11,11 @@ public class Tree : MonoBehaviour
     public GameObject dropLog;
     public AnimationCurve clickSpeedToLeafSpeed, clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
+    public float clickCurrentSpeed ;
 
     private Animator _anim;
     private readonly ArrayList _clicks = new();
     private long _lastClick;
-    private float _clickCurrentSpeed;
     private AudioClip[] _rustleAudioClip;
     private AudioClip[] _dropLogAudioClip;
     private static readonly int Down = Animator.StringToHash("Down");
@@ -75,9 +75,9 @@ public class Tree : MonoBehaviour
 
         if (_clicks.Count > 1)
         {
-            _clickCurrentSpeed = (long) _clicks[^1] - (long) _clicks[^2];
-            _anim.SetTrigger(_clickCurrentSpeed > 200 ? Bounce1Start : Bounce2Start);
-            _anim.SetFloat(Speed, (float) Math.Max(0.6, (330 - _clickCurrentSpeed) / 250f * 1.9f));
+            clickCurrentSpeed = (long) _clicks[^1] - (long) _clicks[^2];
+            _anim.SetTrigger(clickCurrentSpeed > 200 ? Bounce1Start : Bounce2Start);
+            _anim.SetFloat(Speed, (float) Math.Max(0.6, (330 - clickCurrentSpeed) / 250f * 1.9f));
         }
         else
         {
@@ -86,21 +86,21 @@ public class Tree : MonoBehaviour
         }
 
         //Leafs drop
-        var leafDropSpeed = _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed) : 0.3f;
+        var leafDropSpeed = _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(clickCurrentSpeed) : 0.3f;
         for (var i = -1; i < (int) (leafDropSpeed / 0.6f); i++)
             Instantiate(leaf).GetComponent<LeafDrop>().speed = leafDropSpeed;
 
         Effect.ClickEffect(_camera.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#76E573"));
         Effect.SpawnFloatingText(Input.mousePosition,
             dataStorage.user.ClickPower,
-            _clicks.Count > 1 ? clickSpeedToFloatingSpeed.Evaluate(_clickCurrentSpeed) : 2f);
+            _clicks.Count > 1 ? clickSpeedToFloatingSpeed.Evaluate(clickCurrentSpeed) : 2f);
 
         if (Random.Range(0f, 1f) < dropChance)
         {
             PlaySound(_dropLogAudioClip);
             var log = Instantiate(dropLog);
             log.GetComponent<LogResources>().speed =
-                _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(_clickCurrentSpeed) + 0.1f : 0.4f;
+                _clicks.Count > 1 ? clickSpeedToLeafSpeed.Evaluate(clickCurrentSpeed) + 0.1f : 0.4f;
         }
         else
             PlaySound(_rustleAudioClip);

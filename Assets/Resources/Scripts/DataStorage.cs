@@ -7,30 +7,36 @@ public class DataStorage : MonoBehaviour
 
     private void Start()
     {
-        //TODO -----------------> User = User.Load();
         user = null;
+        user = User.Load();
         if (user == null)
-            InitializeUser();
+            user = new User();
         else
             Debug.Log("User loaded from save data!");
+
+        InitializeUser();
 
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
         {
             shopItem.GetComponent<ShopItem>().Start();
             shopItem.GetComponent<ShopItem>().TurnAvailability(true);
             shopItem.GetComponent<ShopItem>().TurnUpgradeModeIfNecessary();
+            shopItem.GetComponent<ShopItem>().TurnUpgradeAvailability(true);
         }
+
         user.UpdateUI();
+        user.UpdateBuildUI();
     }
 
     private void InitializeUser()
     {
-        user = new User();
+        user.ShopItemValueText = new();
+        user.ShopItemPriceText = new();
         foreach (var building in GameObject.FindGameObjectsWithTag("ShopItem"))
         {
             var shopBase = building.transform.Find("ShopItem_base");
-            user.shopItemValueText.Add(shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>());
-            user.shopItemPriceText.Add(shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>());
+            user.ShopItemValueText.Add(shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>());
+            user.ShopItemPriceText.Add(shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>());
         }
     }
 }

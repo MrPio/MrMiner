@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
-//[Serializable]
+[Serializable]
 public class Building
 {
     public int Version { get; private set; }
