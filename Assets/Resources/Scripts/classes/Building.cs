@@ -13,7 +13,7 @@ public class Building
     public int Count { get; private set; }
     private string Color { get; }
     private BigInteger UpgradeBaseCost { get; }
-    public bool BuildingAvailable, UpgradeAvailable;
+    public bool buildingAvailable, upgradeAvailable;
 
     private string Name { get; }
     private BigInteger BaseCost { get; }

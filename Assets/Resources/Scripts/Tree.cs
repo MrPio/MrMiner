@@ -11,7 +11,7 @@ public class Tree : MonoBehaviour
     public GameObject dropLog;
     public AnimationCurve clickSpeedToLeafSpeed, clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
-    public float clickCurrentSpeed ;
+    public float clickCurrentSpeed;
 
     private Animator _anim;
     private readonly ArrayList _clicks = new();
@@ -24,7 +24,7 @@ public class Tree : MonoBehaviour
     private static readonly int Bounce2Start = Animator.StringToHash("Bounce2Start");
     private static readonly int Speed = Animator.StringToHash("speed");
     private Camera _camera;
-    [SerializeField] public DataStorage dataStorage;
+    public DataStorage dataStorage;
     private static readonly int Bounce = Animator.StringToHash("Bounce");
     private Animator _headerLogValueAnimator;
 

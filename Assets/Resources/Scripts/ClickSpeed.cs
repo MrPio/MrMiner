@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,8 +10,10 @@ public class ClickSpeed : MonoBehaviour
     public AnimationCurve timeToScale;
     public TextMeshProUGUI text;
     public Tree tree;
+    public Animator animator;
 
     private float _time;
+    private static readonly int Start = Animator.StringToHash("Start");
 
     private void Update()
     {
@@ -19,8 +22,11 @@ public class ClickSpeed : MonoBehaviour
         time *= 0.1f / 1000f;
         if (_time < time)
             return;
-        var scale = timeToScale.Evaluate(time /0.1f);
-        text.text = tree.clickCurrentSpeed.ToString(CultureInfo.InvariantCulture) + " cps";
+        var scale = timeToScale.Evaluate(time / 0.1f);
+        var normalized = tree.clickCurrentSpeed > 0 ? 1000f / tree.clickCurrentSpeed : 0;
+        if (Math.Abs(text.fontSize - scale) > 0.4f)
+            animator.SetTrigger(Start);
+        text.text = normalized.ToString("n2") + " cps";
         text.fontSize = scale;
         _time -= time;
     }

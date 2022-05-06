@@ -33,7 +33,7 @@ namespace utiles
             }
 
             stopwatch.Stop();
-            Debug.Log("CircleEffect took--> " + stopwatch.ElapsedTicks);
+            // Debug.Log("CircleEffect took--> " + stopwatch.ElapsedTicks);
         }
 
         public static void SpawnFloatingText(Vector2 position, BigInteger value, float duration,

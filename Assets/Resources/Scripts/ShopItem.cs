@@ -184,10 +184,10 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     public void TurnAvailability(bool force = false)
     {
         var mode = BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.buildings[index].CurrentCost) >= 0;
-        if (!force && _dataStorage.user.buildings[index].BuildingAvailable == mode)
+        if (!force && _dataStorage.user.buildings[index].buildingAvailable == mode)
             return;
 
-        _dataStorage.user.buildings[index].BuildingAvailable = mode;
+        _dataStorage.user.buildings[index].buildingAvailable = mode;
 
         var colorFinal = mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
         var colorInitial = !mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
@@ -206,10 +206,10 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
         var upgradeMode =
             BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.buildings[index].CalculateUpgradeCost()) >= 0;
 
-        if (!force && _dataStorage.user.buildings[index].UpgradeAvailable == upgradeMode)
+        if (!force && _dataStorage.user.buildings[index].upgradeAvailable == upgradeMode)
             return;
 
-        _dataStorage.user.buildings[index].UpgradeAvailable = upgradeMode;
+        _dataStorage.user.buildings[index].upgradeAvailable = upgradeMode;
         var colorFinal = upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
         var colorInitial = !upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
 

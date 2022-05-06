@@ -4,11 +4,13 @@ using UnityEngine;
 public class DataStorage : MonoBehaviour
 {
     public User user;
+    public bool resetProgresses;
 
     private void Start()
     {
         user = null;
-        user = User.Load();
+        if (!resetProgresses)
+            user = User.Load();
         if (user == null)
             user = new User();
         else
