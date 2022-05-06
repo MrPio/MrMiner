@@ -20,7 +20,7 @@ public class Building
     private double BaseLps { get; }
     private string Logo { get; }
 
-    public Building(string name, BigInteger baseCost, string colorHex, float baseLps, string logo,
+    public Building(string name, BigInteger baseCost, string colorHex, double baseLps, string logo,
         BigInteger upgradeBaseCost)
     {
         Name = name;
@@ -69,6 +69,7 @@ public class Building
 
         building.GetComponent<ShopItem>().index = index;
         building.tag = "ShopItem";
+        building.GetComponent<ShopItem>().shopItemType = ShopItem.ShopItemType.LOG;
 
         var shopBase = building.transform.Find("ShopItem_base").gameObject;
         shopBase.GetComponent<Image>().color = utilies.HexToColor(Color);
@@ -91,9 +92,8 @@ public class Building
         rect.width *= xScaleFactor;
         shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta =
             new Vector2(rect.width, rect.height);
-        //TODO QUESTE MODIFICHE NON VENGONO FATTEEEEE
         shopBase.transform.Find("ShopItem_version").GetComponent<TextMeshProUGUI>().text = "lv." + Version;
-
+        
         return building;
     }
 }

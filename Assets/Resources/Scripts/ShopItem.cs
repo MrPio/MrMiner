@@ -8,6 +8,12 @@ using Vector2 = UnityEngine.Vector2;
 public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler,
     IPointerUpHandler
 {
+    public enum ShopItemType
+    {
+        LOG,
+        COIN
+    };
+
     private static AudioClip _mouseDownAudioClip;
     private static AudioClip _mouseUpAudioClip;
     private static AudioClip _notEnoughMoney;
@@ -21,6 +27,7 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     public AnimationCurve onPressCurve;
     public float onPressAnimationDuration = 0.5f;
     public int index;
+    public ShopItemType shopItemType;
 
     private bool _onDownAnimation;
     private bool _onUpAnimation;
@@ -169,25 +176,50 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     public void TurnUpgradeModeIfNecessary()
     {
-        _shopItemPriceUpgradeText.text = utilies.NumToStr(_dataStorage.user.buildings[index].CalculateUpgradeCost());
-        _shopItemVersionText.text = "lv." + _dataStorage.user.buildings[index].Version;
+        if (shopItemType == ShopItemType.LOG)
+        {
+            _shopItemPriceUpgradeText.text =
+                utilies.NumToStr(_dataStorage.user.buildings[index].CalculateUpgradeCost());
+            _shopItemVersionText.text = "lv." + _dataStorage.user.buildings[index].Version;
 
-        if (_updateMode == _dataStorage.user.buildings[index].CheckForUpgrade())
-            return;
+            if (_updateMode == _dataStorage.user.buildings[index].CheckForUpgrade())
+                return;
+        }
+        else
+        {
+            _shopItemPriceUpgradeText.text =
+                utilies.NumToStr(_dataStorage.user.stores[index].CalculateUpgradeCost());
+            _shopItemVersionText.text = "lv." + _dataStorage.user.stores[index].Version;
+
+            if (_updateMode == _dataStorage.user.stores[index].CheckForUpgrade())
+                return;
+        }
 
         _updateMode = !_updateMode;
         _animator.SetTrigger(_updateMode ? "Open" : "Close");
-        if(Time.time>2)
+        if (Time.time > 2)
             _audioSource.PlayOneShot(_updateMode ? _updateOn : _updateOff);
     }
 
     public void TurnAvailability(bool force = false)
     {
-        var mode = BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.buildings[index].CurrentCost) >= 0;
-        if (!force && _dataStorage.user.buildings[index].buildingAvailable == mode)
-            return;
+        bool mode;
+        if (shopItemType == ShopItemType.LOG)
+        {
+            mode = BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.buildings[index].CurrentCost) >= 0;
+            if (!force && _dataStorage.user.buildings[index].buildingAvailable == mode)
+                return;
 
-        _dataStorage.user.buildings[index].buildingAvailable = mode;
+            _dataStorage.user.buildings[index].buildingAvailable = mode;
+        }
+        else
+        {
+            mode = BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.stores[index].CurrentCost) >= 0;
+            if (!force && _dataStorage.user.stores[index].buildingAvailable == mode)
+                return;
+
+            _dataStorage.user.stores[index].buildingAvailable = mode;
+        }
 
         var colorFinal = mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
         var colorInitial = !mode ? Color.clear : new Color(0f, 0f, 0f, 0.4f);
@@ -200,16 +232,35 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     public void TurnUpgradeAvailability(bool force = false)
     {
-        if (!_dataStorage.user.buildings[index].CheckForUpgrade())
-            return;
+        bool upgradeMode;
+        if (shopItemType == ShopItemType.LOG)
+        {
+            if (!_dataStorage.user.buildings[index].CheckForUpgrade())
+                return;
 
-        var upgradeMode =
-            BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.buildings[index].CalculateUpgradeCost()) >= 0;
+            upgradeMode =
+                BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.buildings[index].CalculateUpgradeCost()) >=
+                0;
 
-        if (!force && _dataStorage.user.buildings[index].upgradeAvailable == upgradeMode)
-            return;
+            if (!force && _dataStorage.user.buildings[index].upgradeAvailable == upgradeMode)
+                return;
 
-        _dataStorage.user.buildings[index].upgradeAvailable = upgradeMode;
+            _dataStorage.user.buildings[index].upgradeAvailable = upgradeMode;
+        }
+        else
+        {
+            if (!_dataStorage.user.stores[index].CheckForUpgrade())
+                return;
+
+            upgradeMode =
+                BigInteger.Compare(_dataStorage.user.Logs, _dataStorage.user.stores[index].CalculateUpgradeCost()) >= 0;
+
+            if (!force && _dataStorage.user.stores[index].upgradeAvailable == upgradeMode)
+                return;
+
+            _dataStorage.user.stores[index].upgradeAvailable = upgradeMode;
+        }
+
         var colorFinal = upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
         var colorInitial = !upgradeMode ? utilies.HexToColor("#F2FF72") : Color.gray;
 
@@ -219,7 +270,10 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     private void Buy()
     {
-        if (_dataStorage.user.Buy(_dataStorage.user.buildings[index]))
+        var buyCond = shopItemType == ShopItemType.LOG
+            ? _dataStorage.user.Buy(_dataStorage.user.buildings[index])
+            : _dataStorage.user.Buy(_dataStorage.user.stores[index]);
+        if (buyCond)
         {
             _audioSource.PlayOneShot(_bought);
             TurnUpgradeModeIfNecessary();
@@ -230,6 +284,9 @@ public class ShopItem : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 
     private void BuyUpgrade()
     {
+        var buyCond = shopItemType == ShopItemType.LOG
+            ? _dataStorage.user.BuyUpgrade(_dataStorage.user.buildings[index])
+            : _dataStorage.user.BuyUpgrade(_dataStorage.user.stores[index]);
         if (_dataStorage.user.BuyUpgrade(_dataStorage.user.buildings[index]))
         {
             TurnUpgradeModeIfNecessary();

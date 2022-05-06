@@ -26,6 +26,14 @@ public class DataStorage : MonoBehaviour
             shopItem.GetComponent<ShopItem>().TurnUpgradeAvailability(true);
         }
 
+        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItemCoin"))
+        {
+            shopItem.GetComponent<ShopItem>().Start();
+            shopItem.GetComponent<ShopItem>().TurnAvailability(true);
+            shopItem.GetComponent<ShopItem>().TurnUpgradeModeIfNecessary();
+            shopItem.GetComponent<ShopItem>().TurnUpgradeAvailability(true);
+        }
+
         user.UpdateUI();
         user.UpdateBuildUI();
     }
@@ -34,9 +42,16 @@ public class DataStorage : MonoBehaviour
     {
         user.ShopItemValueText = new();
         user.ShopItemPriceText = new();
-        foreach (var building in GameObject.FindGameObjectsWithTag("ShopItem"))
+        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
         {
-            var shopBase = building.transform.Find("ShopItem_base");
+            var shopBase = shopItem.transform.Find("ShopItem_base");
+            user.ShopItemValueText.Add(shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>());
+            user.ShopItemPriceText.Add(shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>());
+        }
+
+        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItemCoin"))
+        {
+            var shopBase = shopItem.transform.Find("ShopItem_base");
             user.ShopItemValueText.Add(shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>());
             user.ShopItemPriceText.Add(shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>());
         }

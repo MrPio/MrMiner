@@ -1066,6 +1066,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   onPressAnimationDuration: 0.06
   index: 0
+  shopItemType: 0
 --- !u!222 &3658446906527320900
 CanvasRenderer:
   m_ObjectHideFlags: 0

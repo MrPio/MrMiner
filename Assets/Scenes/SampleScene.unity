@@ -419,7 +419,7 @@ GameObject:
   - component: {fileID: 134080901}
   - component: {fileID: 134080900}
   m_Layer: 5
-  m_Name: Content
+  m_Name: ContentCoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1958,7 +1958,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1373703710}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.7, z: -10}
+  m_LocalPosition: {x: 11.55, y: 1.7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3016,6 +3016,22 @@ PrefabInstance:
       propertyPath: switchMode
       value: 
       objectReference: {fileID: 1415478588445438601}
+    - target: {fileID: 5217160224556486176, guid: effa0b11078ef454c889885fcbce5dd0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fc3c224d1c268c04a88b9e4b53c72426, type: 3}
+    - target: {fileID: 5217160224556486176, guid: effa0b11078ef454c889885fcbce5dd0, type: 3}
+      propertyPath: m_Color.b
+      value: 0.263
+      objectReference: {fileID: 0}
+    - target: {fileID: 5217160224556486176, guid: effa0b11078ef454c889885fcbce5dd0, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5217160224556486176, guid: effa0b11078ef454c889885fcbce5dd0, type: 3}
+      propertyPath: m_Color.r
+      value: 0.975915
+      objectReference: {fileID: 0}
     - target: {fileID: 6782486485485902004, guid: effa0b11078ef454c889885fcbce5dd0, type: 3}
       propertyPath: m_Name
       value: Switch
@@ -3280,7 +3296,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1151986255143839438, guid: 1a4352c24b3419240805eb76c91873c6, type: 3}
       propertyPath: m_text
-      value: 
+      value: sss
       objectReference: {fileID: 0}
     - target: {fileID: 1151986255143839439, guid: 1a4352c24b3419240805eb76c91873c6, type: 3}
       propertyPath: tree
@@ -3378,7 +3394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
       propertyPath: resetProgresses
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
