@@ -314,6 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leaf: {fileID: 231200007698563872, guid: 57c96c284b6f68440954ea6f3f319dec, type: 3}
   dropLog: {fileID: 9207992185795172239, guid: e3c04bb6bdf573d4388f128e0d442adc, type: 3}
+  praiseText: {fileID: 4008551262648457342, guid: 604a2f4774012fc49ad800f96faf4bc2, type: 3}
   clickSpeedToLeafSpeed:
     serializedVersion: 2
     m_Curve:
@@ -381,6 +382,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   dropChance: 0.5
+  clickCurrentSpeed: 0
   dataStorage: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
 --- !u!60 &9181060333622587447
 PolygonCollider2D:

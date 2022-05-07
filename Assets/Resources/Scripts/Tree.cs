@@ -9,6 +9,7 @@ public class Tree : MonoBehaviour
 {
     public GameObject leaf;
     public GameObject dropLog;
+    public GameObject praiseText;
     public AnimationCurve clickSpeedToLeafSpeed, clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
     public float clickCurrentSpeed;
@@ -27,6 +28,7 @@ public class Tree : MonoBehaviour
     public DataStorage dataStorage;
     private static readonly int Bounce = Animator.StringToHash("Bounce");
     private Animator _headerLogValueAnimator;
+    private float _lastPraiseTime;
 
     private void Start()
     {
@@ -81,6 +83,7 @@ public class Tree : MonoBehaviour
         }
         else
         {
+            clickCurrentSpeed = 1000;
             _anim.SetTrigger(Bounce1Start);
             _anim.SetFloat(Speed, 0.6f);
         }
@@ -107,6 +110,9 @@ public class Tree : MonoBehaviour
 
         dataStorage.user.EarnClick();
         _headerLogValueAnimator.SetTrigger(Bounce);
+
+        if (clickCurrentSpeed < 120 && Time.time - _lastPraiseTime > 1)
+            SpawnPraiseText();
     }
 
     private void PlaySound(IReadOnlyList<AudioClip> audioClips)
@@ -114,5 +120,22 @@ public class Tree : MonoBehaviour
         var audioSource = GetComponent<AudioSource>();
         audioSource.clip = audioClips[Random.Range(0, audioClips.Count)];
         audioSource.PlayOneShot(audioSource.clip);
+    }
+
+    private void SpawnPraiseText()
+    {
+        _lastPraiseTime = Time.time;
+        var deltaX = Screen.width * 0.4f;
+        var deltaY = Screen.height * 0.25f;
+        var xPos = Random.Range(deltaX / 2f, deltaX);
+        xPos = Random.Range(0f, 1f) < 0.5 ? xPos : -xPos;
+        var yPos = Random.Range(0, deltaY);
+        var rotation = -xPos / deltaX * 45f;
+
+        var center = new Vector2(Screen.width / 2f, Input.mousePosition.y);
+        var pos = center + new Vector2(xPos, yPos);
+
+        Instantiate(praiseText, pos, Quaternion.Euler(0, 0, rotation),
+            GameObject.Find("Canvas").transform);
     }
 }
