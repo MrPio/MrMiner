@@ -45,13 +45,15 @@ public class Store
         return upgradesAvailable > Version;
     }
 
-    public BigInteger CalculateUpgradeCost()
+    public BigInteger CurrentUpgradeCost
     {
-        var cost = UpgradeBaseCost;
-        var costs = CoinBuildings.CostMultiply;
-        for (var i = 0; i < Version + 1; i++)
-            cost = BigInteger.Multiply(cost, new BigInteger(costs[i]));
-        return cost;
+        get
+        {
+            var cost = UpgradeBaseCost;
+            for (var i = 0; i < Version + 1; i++)
+                cost = BigInteger.Multiply(cost, new BigInteger(CoinBuildings.CostMultiply[i]));
+            return cost;
+        }
     }
 
     public void Buy()

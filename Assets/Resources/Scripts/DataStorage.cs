@@ -8,14 +8,7 @@ public class DataStorage : MonoBehaviour
 
     private void Start()
     {
-        user = null;
-        if (!resetProgresses)
-            user = User.Load();
-        if (user == null)
-            user = new User();
-        else
-            Debug.Log("User loaded from save data!");
-
+        user = !resetProgresses ? User.Load() : new User();
         InitializeUser();
 
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))

@@ -45,13 +45,16 @@ public class Building
         return upgradesAvailable > Version;
     }
 
-    public BigInteger CalculateUpgradeCost()
+    public BigInteger CurrentUpgradeCost
     {
-        var cost = UpgradeBaseCost;
-        var costs = Name == "Mighty Fist" ? WoodBuildings.CostMultiplyFist : WoodBuildings.CostMultiply;
-        for (int i = 0; i < Version + 1; i++)
-            cost = BigInteger.Multiply(cost, new BigInteger(costs[i]));
-        return cost;
+        get
+        {
+            var cost = UpgradeBaseCost;
+            var costs = Name == "Mighty Fist" ? WoodBuildings.CostMultiplyFist : WoodBuildings.CostMultiply;
+            for (var i = 0; i < Version + 1; i++)
+                cost = BigInteger.Multiply(cost, new BigInteger(costs[i]));
+            return cost;
+        }
     }
 
     public void Buy()
@@ -59,9 +62,9 @@ public class Building
         ++Count;
     }
 
-    public  BigInteger CurrentCost => new((double) BaseCost * Math.Pow(1.15f, Count));
+    public BigInteger CurrentCost => new((double) BaseCost * Math.Pow(1.15f, Count));
 
-    public double Lps => BaseLps * Count*Mathf.Pow(2, Version);
+    public double Lps => BaseLps * Count * Mathf.Pow(2, Version);
 
     public GameObject InstantiateGameObject(GameObject building, int index)
     {
@@ -86,14 +89,14 @@ public class Building
             utilies.NumToStr(CurrentCost);
         shopBase.transform.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = Count.ToString();
         shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = logo;
-        
+
         var xScaleFactor = logo.bounds.size.x / logo.bounds.size.y / 0.942445993f;
         var rect = shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().rect;
         rect.width *= xScaleFactor;
         shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta =
             new Vector2(rect.width, rect.height);
         shopBase.transform.Find("ShopItem_version").GetComponent<TextMeshProUGUI>().text = "lv." + Version;
-        
+
         return building;
     }
 }

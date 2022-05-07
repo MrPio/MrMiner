@@ -14,6 +14,8 @@ public class LpsCps : MonoBehaviour
     {
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
             _shopItems.Add(shopItem.GetComponent<ShopItem>());
+        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItemCoin"))
+            _shopItems.Add(shopItem.GetComponent<ShopItem>());
         Debug.Log("_shopItems--->" + _shopItems.Count);
         _startTime = Time.time;
     }
@@ -24,6 +26,7 @@ public class LpsCps : MonoBehaviour
         {
             _startTime = Time.time;
             dataStorage.user.EarnLps(fps);
+            dataStorage.user.EarnCps(fps);
 
             _passedSecond += 1f / fps;
             if (_passedSecond >= 0.5f)

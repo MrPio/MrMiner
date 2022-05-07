@@ -50,7 +50,7 @@ public class LogResources : MonoBehaviour
 
         var scale = Random.Range(0.8f, 1.2f);
         transform.localScale *= scale;
-        _value = new BigInteger((double) _dataStorage.user.ClickPower * 6f * Math.Pow(scale, 2f));
+        _value = new BigInteger((double) _dataStorage.user.ClickPowerLog * 6f * Math.Pow(scale, 2f));
 
         _timeStart = Time.time;
     }
@@ -90,7 +90,7 @@ public class LogResources : MonoBehaviour
         _headerLogValueAnimator.SetTrigger(Bounce);
         _headerLogValueColorFade
             .FadeToColor(Color.white, utilies.HexToColor("#FFFD73"), typeof(TextMeshProUGUI));
-        _dataStorage.user.EarnClick(_value);
+        _dataStorage.user.EarnClickLog(_value);
         Effect.SpawnFloatingText(Input.mousePosition, _value, 1.6f);
         Destroy(gameObject);
     }

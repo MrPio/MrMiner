@@ -14,7 +14,7 @@ public class User
     private static readonly string SaveFileLocation = "/MrMiner_User.dat";
 
     public BigInteger Logs { get; private set; }
-    public BigInteger Coins { get; }
+    public BigInteger Coins { get; private set; }
     public DateTime ProfileCreated { get; }
     public DateTime LastAutosave { get; private set; }
     public List<Building> buildings;
@@ -71,13 +71,25 @@ public class User
     public double Lps => buildings.Sum(building => building.Lps);
     public double Cps => stores.Sum(store => store.Cps);
 
-    public BigInteger ClickPower
+    public BigInteger ClickPowerLog
     {
         get
         {
             var clickPower = BigInteger.Add(
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Lps * _lpsPerc)
+            );
+            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            return clickPower;
+        }
+    }
+    public BigInteger ClickPowerCoin
+    {
+        get
+        {
+            var clickPower = BigInteger.Add(
+                BigInteger.Pow(new BigInteger(2), _clickVersionLog),
+                new BigInteger(Cps * _cpsPerc)
             );
             clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
             return clickPower;
@@ -92,28 +104,50 @@ public class User
         UpdateUI();
     }
 
-    public void EarnClick()
+    public void EarnCps(int fps)
     {
-        Logs = BigInteger.Add(Logs, ClickPower);
+        Coins = BigInteger.Add(Coins, new BigInteger(Cps / fps + _cpsRest));
+        _cpsRest += Cps / fps - Math.Truncate(Cps / fps);
+        _cpsRest -= Math.Truncate(_cpsRest);
         UpdateUI();
     }
 
-    public void EarnClick(BigInteger value)
+    public void EarnClickLog()
+    {
+        Logs = BigInteger.Add(Logs, ClickPowerLog);
+        UpdateUI();
+    }
+
+    public void EarnClickLog(BigInteger value)
     {
         Logs = BigInteger.Add(Logs, value);
         UpdateUI();
     }
+    
+    public void EarnClickCoin()
+    {
+        Coins = BigInteger.Add(Coins, ClickPowerCoin);
+        UpdateUI();
+    }
+
+    public void EarnClickCoin(BigInteger value)
+    {
+        Coins = BigInteger.Add(Coins, value);
+        UpdateUI();
+    }
+
 
     public void UpdateUI()
     {
-        GameObject.Find("Header_log_value").GetComponent<TextMeshProUGUI>().text =
+        GameObject.FindGameObjectWithTag("Header_log_value").GetComponent<TextMeshProUGUI>().text =
             utilies.NumToStr(Logs);
-        GameObject.Find("Header_lps").GetComponent<TextMeshProUGUI>().text =
+        GameObject.FindGameObjectWithTag("Header_lps").GetComponent<TextMeshProUGUI>().text =
             utilies.DoubleToStr(Lps) + " lps";
-        /*GameObject.Find("Header_coin_value").GetComponent<TextMeshProUGUI>().text =
+
+        GameObject.FindGameObjectWithTag("Header_coin_value").GetComponent<TextMeshProUGUI>().text =
             utilies.NumToStr(Coins);
-        GameObject.Find("Header_cps").GetComponent<TextMeshProUGUI>().text =
-            utilies.DoubleToStr(Cps) + " lps";*/
+        GameObject.FindGameObjectWithTag("Header_cps").GetComponent<TextMeshProUGUI>().text =
+            utilies.DoubleToStr(Cps) + " cps";
     }
 
     public void UpdateBuildUI()
@@ -128,67 +162,79 @@ public class User
 
     public bool Buy(Building building)
     {
-        if (Logs >= building.CurrentCost)
-        {
-            Logs = BigInteger.Subtract(Logs, building.CurrentCost);
-            GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
-                utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
-            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
+        if (!EnoughForBuilding(buildings.IndexOf(building)))
+            return false;
 
-            building.Buy();
-            UpdateBuildUI();
-            return true;
-        }
+        Logs = BigInteger.Subtract(Logs, building.CurrentCost);
+        GameObject.FindGameObjectWithTag("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
+            utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
+        GameObject.FindGameObjectWithTag("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
-        return false;
+        building.Buy();
+        UpdateBuildUI();
+        return true;
     }
-    
+
     public bool Buy(Store store)
     {
-        if (Logs >= store.CurrentCost)
-        {
-            Logs = BigInteger.Subtract(Logs, store.CurrentCost);
-            GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
-                utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
-            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
+        if (!EnoughForStore(stores.IndexOf(store)))
+            return false;
 
-            store.Buy();
-            UpdateBuildUI();
-            return true;
-        }
+        Coins = BigInteger.Subtract(Coins, store.CurrentCost);
+        GameObject.FindGameObjectWithTag("Header_cps").GetComponent<ColorFade>().FadeToColor(Color.white,
+            utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
+        GameObject.FindGameObjectWithTag("Header_cps").GetComponent<Animator>().SetTrigger(Bounce);
 
-        return false;
+        store.Buy();
+        UpdateBuildUI();
+        return true;
     }
 
     public bool BuyUpgrade(Building building)
     {
-        if (building.CheckForUpgrade() && Logs >= building.CalculateUpgradeCost())
-        {
-            Logs = BigInteger.Subtract(Logs, building.CalculateUpgradeCost());
-            GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
-                utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
-            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
+        if (!EnoughForUpgradeBuilding(buildings.IndexOf(building)))
+            return false;
 
-            building.Upgrade();
-            return true;
-        }
+        Coins = BigInteger.Subtract(Coins, building.CurrentUpgradeCost);
+        GameObject.FindGameObjectWithTag("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
+            utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
+        GameObject.FindGameObjectWithTag("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
 
-        return false;
+        building.Upgrade();
+        return true;
     }
-    
+
     public bool BuyUpgrade(Store store)
     {
-        if (store.CheckForUpgrade() && Logs >= store.CalculateUpgradeCost())
-        {
-            Logs = BigInteger.Subtract(Logs, store.CalculateUpgradeCost());
-            GameObject.Find("Header_lps").GetComponent<ColorFade>().FadeToColor(Color.white,
-                utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
-            GameObject.Find("Header_lps").GetComponent<Animator>().SetTrigger(Bounce);
+        if (!EnoughForUpgradeStore(stores.IndexOf(store)))
+            return false;
 
-            store.Upgrade();
-            return true;
-        }
+        Coins = BigInteger.Subtract(Coins, store.CurrentUpgradeCost);
+        GameObject.FindGameObjectWithTag("Header_cps").GetComponent<ColorFade>().FadeToColor(Color.white,
+            utilies.HexToColor("#FF5C26"), typeof(TextMeshProUGUI));
+        GameObject.FindGameObjectWithTag("Header_cps").GetComponent<Animator>().SetTrigger(Bounce);
 
-        return false;
+        store.Upgrade();
+        return true;
+    }
+
+    public bool EnoughForBuilding(int index)
+    {
+        return BigInteger.Compare(Logs, buildings[index].CurrentCost) >= 0;
+    }
+
+    public bool EnoughForStore(int index)
+    {
+        return BigInteger.Compare(Coins, stores[index].CurrentCost) >= 0;
+    }
+
+    public bool EnoughForUpgradeBuilding(int index)
+    {
+        return BigInteger.Compare(Coins, buildings[index].CurrentUpgradeCost) >= 0;
+    }
+
+    public bool EnoughForUpgradeStore(int index)
+    {
+        return BigInteger.Compare(Coins, stores[index].CurrentUpgradeCost) >= 0;
     }
 }

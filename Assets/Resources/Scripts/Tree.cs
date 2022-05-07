@@ -95,7 +95,7 @@ public class Tree : MonoBehaviour
 
         Effect.ClickEffect(_camera.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#76E573"));
         Effect.SpawnFloatingText(Input.mousePosition,
-            dataStorage.user.ClickPower,
+            dataStorage.user.ClickPowerLog,
             _clicks.Count > 1 ? clickSpeedToFloatingSpeed.Evaluate(clickCurrentSpeed) : 2f);
 
         if (Random.Range(0f, 1f) < dropChance)
@@ -108,7 +108,7 @@ public class Tree : MonoBehaviour
         else
             PlaySound(_rustleAudioClip);
 
-        dataStorage.user.EarnClick();
+        dataStorage.user.EarnClickLog();
         _headerLogValueAnimator.SetTrigger(Bounce);
 
         if (clickCurrentSpeed < 120 && Time.time - _lastPraiseTime > 1)
