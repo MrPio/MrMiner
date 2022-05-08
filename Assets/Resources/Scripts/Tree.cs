@@ -13,6 +13,7 @@ public class Tree : MonoBehaviour
     public AnimationCurve clickSpeedToLeafSpeed, clickSpeedToFloatingSpeed;
     public float dropChance = .5f;
     public float clickCurrentSpeed;
+    public SpriteRenderer treeSpriteRenderer;
 
     private Animator _anim;
     private readonly ArrayList _clicks = new();
@@ -137,5 +138,10 @@ public class Tree : MonoBehaviour
 
         Instantiate(praiseText, pos, Quaternion.Euler(0, 0, rotation),
             GameObject.Find("Canvas").transform);
+    }
+
+    public void RandomScale()
+    {
+        treeSpriteRenderer.material.SetFloat("_Scale", Random.Range(3f, 60f));
     }
 }

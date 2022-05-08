@@ -1,17 +1,18 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using utiles;
 
 public class SellButton : MonoBehaviour
 {
-    public AudioClip[] sold,damage;
-    public AudioClip beep;
+    public AudioClip[] sold, damage;
+    public AudioClip beep, overheat;
     public AnimationCurve onPressCurve, timeToNextSell;
     public Transform coin;
     public float timeToStart = 1f;
     public int maxClicks = 100;
-    public SpriteRenderer glow, coinSpriteRenderer;
-    public float cooldownTime = 5;
+    public SpriteRenderer glowSpriteRenderer, coinSpriteRenderer;
+    public float cooldownTime = 5, rebuiltTime = 10;
+    public Animator overheatAnimator;
+    public bool overheated;
 
     private static AudioClip _mouseDownAudioClip;
     private static AudioClip _mouseUpAudioClip;
@@ -26,6 +27,10 @@ public class SellButton : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Color _lastColor, _lastColorCoin;
     private bool _cool = true;
+    private float _overheatedTime;
+    private float _clickBackup;
+    private static readonly int Start1 = Animator.StringToHash("Start");
+    private static readonly int Inverse = Animator.StringToHash("Inverse");
 
     private void Start()
     {
@@ -54,17 +59,33 @@ public class SellButton : MonoBehaviour
         transform.localPosition = new Vector2(0, _shopBaseInitialLocalPosY + localY);
         coin.localPosition = new Vector2(0, _shopBaseInitialLocalPosY + localY);
 
-        if (_onDownAnimation)
+        if (_onDownAnimation && !overheated)
         {
             if (t > timeToStart && Time.time - _lastSell > timeToNextSell.Evaluate(t))
             {
+                _clickBackup = 0;
                 ++_clicks;
+                if (_clicks >= maxClicks)
+                {
+                    OnMouseUp();
+                    overheated = true;
+                    _overheatedTime = Time.time;
+                    _audioSource.PlayOneShot(overheat);
+                    overheatAnimator.SetTrigger(Start1);
+                    _onDownAnimation = false;
+                    return;
+                }
+
                 _cool = false;
                 _lastSell = Time.time;
                 Effect.ClickEffect(_camera.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#A5FAFF"));
                 Effect.SpawnFloatingText(Input.mousePosition, _dataStorage.user.ClickPowerCoin, 1.6f, "#FFD87C");
                 _dataStorage.user.EarnClickCoin();
-                _audioSource.PlayOneShot(sold[Random.Range(0, sold.Length)]);
+
+                if ((_clicks % (maxClicks / 4) == 0))
+                    _audioSource.PlayOneShot(damage[Random.Range(0, damage.Length)]);
+                else
+                    _audioSource.PlayOneShot(sold[Random.Range(0, sold.Length)]);
 
                 _lastColor = Color.Lerp(utilies.HexToColor("#FFDA00"), utilies.HexToColor("#EC0005"),
                     (float) _clicks / maxClicks);
@@ -75,30 +96,44 @@ public class SellButton : MonoBehaviour
                 coinSpriteRenderer.color = _lastColorCoin;
 
                 var glowColor = _lastColor;
-                glowColor.a = 0.3f + (float) _clicks / maxClicks;
-                glow.color = glowColor;
+                glowColor.a = 0.1f + (float) _clicks / maxClicks;
+                glowSpriteRenderer.color = glowColor;
             }
         }
 
         if (_onUpAnimation && !_cool)
         {
-
-            var heat = cooldownTime * _clicks / maxClicks;
+            if (_clickBackup == 0)
+                _clickBackup = _clicks;
+            var heat = cooldownTime * _clickBackup / maxClicks;
             if (t / heat >= 1)
             {
                 _clicks = 0;
                 _cool = true;
                 _audioSource.PlayOneShot(beep);
             }
-            var color = _spriteRenderer.color = Color.Lerp(_lastColor, utilies.HexToColor("#FFDA00"), t / heat);
+
+            _clicks = (int) (_clickBackup * (1f - t / heat));
+
+            var color = Color.Lerp(_lastColor, utilies.HexToColor("#FFDA00"), t / heat);
+            _spriteRenderer.color = color;
             coinSpriteRenderer.color = Color.Lerp(_lastColorCoin, Color.white, t / heat);
-            color.a = 1.3f - t / heat;
-            glow.color = color;
+            color.a = 1.2f - t / heat;
+            glowSpriteRenderer.color = color;
+        }
+
+        if (overheated && Time.time - _overheatedTime > rebuiltTime)
+        {
+            overheated = false;
+            overheatAnimator.enabled = true;
+            overheatAnimator.SetTrigger(Inverse);
         }
     }
 
     private void OnMouseDown()
     {
+        if (overheated)
+            return;
         _audioSource.PlayOneShot(_mouseDownAudioClip);
         _timeStart = Time.time;
         _onDownAnimation = true;
@@ -107,14 +142,11 @@ public class SellButton : MonoBehaviour
 
     private void OnMouseUp()
     {
+        if (overheated)
+            return;
         _audioSource.PlayOneShot(_mouseUpAudioClip);
         _timeStart = Time.time;
         _onDownAnimation = false;
         _onUpAnimation = true;
-    }
-
-
-    private void OnMouseUpAsButton()
-    {
     }
 }

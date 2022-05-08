@@ -1,12 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ContainerAnimation : MonoBehaviour
 {
     public Animator animator;
-    public void Stop()
+    public SwitchMode switchMode;
+
+    public void End()
     {
-        animator.enabled = false;
+        if (switchMode.mode)
+            animator.enabled = false;
+    }
+    public void Begin()
+    {
+        if (!switchMode.mode)
+            animator.enabled = false;
     }
 }
