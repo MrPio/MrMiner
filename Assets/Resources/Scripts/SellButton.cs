@@ -4,7 +4,7 @@ using utiles;
 public class SellButton : MonoBehaviour
 {
     public AudioClip[] sold, damage;
-    public AudioClip beep, overheat;
+    public AudioClip beep, overheat, rebuilt;
     public AnimationCurve onPressCurve, timeToNextSell;
     public Transform coin;
     public float timeToStart = 1f;
@@ -13,6 +13,8 @@ public class SellButton : MonoBehaviour
     public float cooldownTime = 5, rebuiltTime = 10;
     public Animator overheatAnimator;
     public bool overheated;
+    public float coinDropChance = 0.5f;
+    public GameObject dropCoin;
 
     private static AudioClip _mouseDownAudioClip;
     private static AudioClip _mouseUpAudioClip;
@@ -71,6 +73,7 @@ public class SellButton : MonoBehaviour
                     overheated = true;
                     _overheatedTime = Time.time;
                     _audioSource.PlayOneShot(overheat);
+                    overheatAnimator.enabled = true;
                     overheatAnimator.SetTrigger(Start1);
                     _onDownAnimation = false;
                     return;
@@ -81,6 +84,11 @@ public class SellButton : MonoBehaviour
                 Effect.ClickEffect(_camera.ScreenToWorldPoint(Input.mousePosition), utilies.HexToColor("#A5FAFF"));
                 Effect.SpawnFloatingText(Input.mousePosition, _dataStorage.user.ClickPowerCoin, 1.6f, "#FFD87C");
                 _dataStorage.user.EarnClickCoin();
+                if (Random.Range(0f, 1f) < coinDropChance)
+                {
+                    var log = Instantiate(dropCoin);
+                    log.GetComponent<CoinResources>().speed = 1-timeToNextSell.Evaluate(t);
+                }
 
                 if ((_clicks % (maxClicks / 4) == 0))
                     _audioSource.PlayOneShot(damage[Random.Range(0, damage.Length)]);
@@ -127,6 +135,7 @@ public class SellButton : MonoBehaviour
             overheated = false;
             overheatAnimator.enabled = true;
             overheatAnimator.SetTrigger(Inverse);
+            _audioSource.PlayOneShot(rebuilt);
         }
     }
 

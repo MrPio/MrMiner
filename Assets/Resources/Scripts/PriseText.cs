@@ -14,8 +14,8 @@ public class PriseText : MonoBehaviour
         animator.SetTrigger(Start1);
     }
 
-    public void Destroy()
+    public void EndPraiseText()
     {
-        Destroy(this,0.5f);
+        Destroy(gameObject);
     }
 }

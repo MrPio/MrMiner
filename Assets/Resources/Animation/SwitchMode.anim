@@ -843,6 +843,13 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: Begin
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.31666666
     functionName: MenuOut
     data: 
@@ -852,6 +859,13 @@ AnimationClip:
     messageOptions: 0
   - time: 0.6166667
     functionName: MenuIn
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8666667
+    functionName: End
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

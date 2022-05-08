@@ -35,6 +35,8 @@ public class DataStorage : MonoBehaviour
     {
         user.ShopItemValueText = new();
         user.ShopItemPriceText = new();
+        user.ShopItemCoinValueText = new();
+        user.ShopItemCoinPriceText = new();
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
         {
             var shopBase = shopItem.transform.Find("ShopItem_base");
@@ -45,8 +47,8 @@ public class DataStorage : MonoBehaviour
         foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItemCoin"))
         {
             var shopBase = shopItem.transform.Find("ShopItem_base");
-            user.ShopItemValueText.Add(shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>());
-            user.ShopItemPriceText.Add(shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>());
+            user.ShopItemCoinValueText.Add(shopBase.Find("ShopItem_value").GetComponent<TextMeshProUGUI>());
+            user.ShopItemCoinPriceText.Add(shopBase.Find("ShopItem_price").GetComponent<TextMeshProUGUI>());
         }
     }
 }

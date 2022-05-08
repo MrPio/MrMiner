@@ -215,53 +215,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.559
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.6
-        value: 0.19676796
-        inSlope: -0.30982485
-        outSlope: -0.30982485
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.15
-        value: 0.107693315
-        inSlope: -0.2314917
-        outSlope: -0.2314917
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.45
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._Fade
-    path: sell_button_base/sell_button_base_web (1)
-    classID: 212
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
+        value: 0.98
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -271,8 +225,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.6
         value: 0.35199994
-        inSlope: -0.5542485
-        outSlope: -0.5542485
+        inSlope: -0.55424845
+        outSlope: -0.55424845
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -425,13 +379,6 @@ AnimationClip:
       isPPtrCurve: 0
     - serializedVersion: 2
       path: 197206497
-      attribute: 2269262469
-      script: {fileID: 0}
-      typeID: 212
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 1707457134
       attribute: 2269262469
       script: {fileID: 0}
       typeID: 212
@@ -678,53 +625,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.559
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.6
-        value: 0.19676796
-        inSlope: -0.30982485
-        outSlope: -0.30982485
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.15
-        value: 0.107693315
-        inSlope: -0.2314917
-        outSlope: -0.2314917
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.45
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._Fade
-    path: sell_button_base/sell_button_base_web (1)
-    classID: 212
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
+        value: 0.98
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -734,8 +635,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.6
         value: 0.35199994
-        inSlope: -0.5542485
-        outSlope: -0.5542485
+        inSlope: -0.55424845
+        outSlope: -0.55424845
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334

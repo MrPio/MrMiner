@@ -20,6 +20,7 @@ public class User
     public List<Building> buildings;
     public List<Store> stores;
     [NonSerialized] public List<TextMeshProUGUI> ShopItemValueText = new(), ShopItemPriceText = new();
+    [NonSerialized] public List<TextMeshProUGUI> ShopItemCoinValueText = new(), ShopItemCoinPriceText = new();
 
     private int _clickVersionLog, _clickVersionCoin;
     private int _lpsPerc, _cpsPerc;
@@ -79,10 +80,11 @@ public class User
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Lps * _lpsPerc)
             );
-            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            //clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
             return clickPower;
         }
     }
+
     public BigInteger ClickPowerCoin
     {
         get
@@ -91,7 +93,7 @@ public class User
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Cps * _cpsPerc)
             );
-            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            //clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
             return clickPower;
         }
     }
@@ -107,6 +109,7 @@ public class User
     public void EarnCps(int fps)
     {
         Coins = BigInteger.Add(Coins, new BigInteger(Cps / fps + _cpsRest));
+        Logs = BigInteger.Subtract(Logs, new BigInteger(Cps / fps + _cpsRest));
         _cpsRest += Cps / fps - Math.Truncate(Cps / fps);
         _cpsRest -= Math.Truncate(_cpsRest);
         UpdateUI();
@@ -123,16 +126,19 @@ public class User
         Logs = BigInteger.Add(Logs, value);
         UpdateUI();
     }
-    
+
     public void EarnClickCoin()
     {
         Coins = BigInteger.Add(Coins, ClickPowerCoin);
+        Logs = BigInteger.Subtract(Logs, ClickPowerCoin);
         UpdateUI();
     }
 
-    public void EarnClickCoin(BigInteger value)
+    public void EarnClickCoin(BigInteger value, bool selling = true)
     {
         Coins = BigInteger.Add(Coins, value);
+        if (selling)
+            Logs = BigInteger.Subtract(Logs, value);
         UpdateUI();
     }
 
@@ -157,6 +163,13 @@ public class User
         {
             ShopItemValueText[count].text = building.Count.ToString();
             ShopItemPriceText[count++].text = utilies.NumToStr(building.CurrentCost);
+        }
+
+        count = 0;
+        foreach (var store in stores)
+        {
+            ShopItemCoinValueText[count].text = store.Count.ToString();
+            ShopItemCoinPriceText[count++].text = utilies.NumToStr(store.CurrentCost);
         }
     }
 
