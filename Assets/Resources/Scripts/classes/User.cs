@@ -21,6 +21,7 @@ public class User
     public List<Store> stores;
     [NonSerialized] public List<TextMeshProUGUI> ShopItemValueText = new(), ShopItemPriceText = new();
     [NonSerialized] public List<TextMeshProUGUI> ShopItemCoinValueText = new(), ShopItemCoinPriceText = new();
+    [NonSerialized] public List<GameObject> ShopItemBuilding = new(), ShopItemStore = new();
 
     private int _clickVersionLog, _clickVersionCoin;
     private int _lpsPerc, _cpsPerc;
@@ -42,6 +43,8 @@ public class User
             buildings.Add(building);
         foreach (var store in CoinBuildings.Stores)
             stores.Add(store);
+        buildings[0].unlocked = true;
+        stores[0].unlocked = true;
         _clickVersionLog = 0;
         _clickVersionCoin = 0;
     }
@@ -80,7 +83,7 @@ public class User
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Lps * _lpsPerc)
             );
-            //clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
             return clickPower;
         }
     }
@@ -93,7 +96,7 @@ public class User
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Cps * _cpsPerc)
             );
-            //clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
             return clickPower;
         }
     }
@@ -249,5 +252,36 @@ public class User
     public bool EnoughForUpgradeStore(int index)
     {
         return BigInteger.Compare(Coins, stores[index].CurrentUpgradeCost) >= 0;
+    }
+
+    public Building CheckAndUnlockBuilding()
+    {
+        //This method checks for a building to unlock, and if it finds one, it unlocks that build forever and returns it, otherwise returns null;
+        foreach (var building in buildings.Where(building => !building.unlocked))
+        {
+            if (BigInteger.Compare(Logs, BigInteger.Divide(building.BaseCost, new BigInteger(3))) >= 0)
+                building.unlocked = true;
+            return building.unlocked ? building : null;
+        }
+
+        return null;
+    }
+
+    public Store CheckAndUnlockStore()
+    {
+        //This method checks for a store to unlock, and if it finds one, it unlocks that store forever and returns it, otherwise returns null;
+        foreach (var store in stores.Where(store => !store.unlocked))
+        {
+            if (BigInteger.Compare(Coins, BigInteger.Divide(store.BaseCost, new BigInteger(3))) >= 0)
+                store.unlocked = true;
+            return store.unlocked ? store : null;
+        }
+
+        return null;
+    }
+
+    public bool IsBuildingAvailable(int index)
+    {
+        return buildings[index].unlocked;
     }
 }

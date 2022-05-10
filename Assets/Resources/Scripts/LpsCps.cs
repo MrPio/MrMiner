@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class LpsCps : MonoBehaviour
@@ -8,15 +10,28 @@ public class LpsCps : MonoBehaviour
     private float _startTime;
     private float _passedSecond;
     [SerializeField] public DataStorage dataStorage;
-    private readonly List<ShopItem> _shopItems = new();
+    private readonly List<ShopItem> _shopItemsBuilding = new(), _shopItemsStore = new();
+    public Animator newShopItemAnimator, canvasAnimator;
+    public GameObject newShopItem;
+    private SpriteRenderer _newShopItemBuilding;
+    private TextMeshProUGUI _newShopItemName, _newShopItemValue;
+    private static readonly int Start1 = Animator.StringToHash("Start");
+    private static readonly int ScrollViewHide = Animator.StringToHash("ScrollViewHide");
+    private GameObject[] _findGameObjectsWithTag;
+    public AudioSource audioSource;
+    public AudioClip woosh;
 
     private void Start()
     {
-        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItem"))
-            _shopItems.Add(shopItem.GetComponent<ShopItem>());
-        foreach (var shopItem in GameObject.FindGameObjectsWithTag("ShopItemCoin"))
-            _shopItems.Add(shopItem.GetComponent<ShopItem>());
-        Debug.Log("_shopItems--->" + _shopItems.Count);
+        foreach (var shopItem in dataStorage.user.ShopItemBuilding)
+            _shopItemsBuilding.Add(shopItem.GetComponent<ShopItem>());
+        foreach (var shopItem in dataStorage.user.ShopItemStore)
+            _shopItemsStore.Add(shopItem.GetComponent<ShopItem>());
+        _newShopItemBuilding = newShopItem.transform.Find("NewShopItem_building").GetComponent<SpriteRenderer>();
+        _newShopItemName = newShopItem.transform.Find("NewShopItem_name").GetComponent<TextMeshProUGUI>();
+        _newShopItemValue = newShopItem.transform.Find("NewShopItem_value").GetComponent<TextMeshProUGUI>();
+
+
         _startTime = Time.time;
     }
 
@@ -29,13 +44,39 @@ public class LpsCps : MonoBehaviour
             dataStorage.user.EarnCps(fps);
 
             _passedSecond += 1f / fps;
-            if (_passedSecond >= 0.5f)
+            if (_passedSecond >= 0.8f)
             {
-                _passedSecond -= 0.5f;
-                foreach (var shopItem in _shopItems)
+                _passedSecond -= 0.8f;
+                var count = 0;
+                foreach (var shopItem in _shopItemsBuilding.Where(shopItem =>
+                             dataStorage.user.buildings[count++].unlocked))
                 {
                     shopItem.TurnAvailability();
                     shopItem.TurnUpgradeAvailability();
+                }
+
+                count = 0;
+                foreach (var shopItem in _shopItemsStore.Where(_ => dataStorage.user.stores[count++].unlocked))
+                {
+                    shopItem.TurnAvailability();
+                    shopItem.TurnUpgradeAvailability();
+                }
+
+                if (!canvasAnimator.enabled)
+                {
+                    var build = dataStorage.user.CheckAndUnlockBuilding();
+                    if (build != null)
+                    {
+                        _newShopItemBuilding.sprite = build.LogoSprite;
+                        _newShopItemName.text = build.Name;
+                        _newShopItemValue.text = utilies.DoubleToStr(build.BaseLps) + " lps";
+                        newShopItem.SetActive(true);
+                        newShopItemAnimator.SetTrigger(Start1);
+                        canvasAnimator.enabled = true;
+                        canvasAnimator.SetTrigger(ScrollViewHide);
+                        dataStorage.user.ShopItemBuilding[dataStorage.user.buildings.IndexOf(build)].SetActive(true);
+                        audioSource.PlayOneShot(woosh);
+                    }
                 }
             }
         }

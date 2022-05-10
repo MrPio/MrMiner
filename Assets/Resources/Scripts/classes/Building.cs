@@ -15,10 +15,12 @@ public class Building
     private BigInteger UpgradeBaseCost { get; }
     public bool buildingAvailable, upgradeAvailable;
 
-    private string Name { get; }
-    private BigInteger BaseCost { get; }
-    private double BaseLps { get; }
-    private string Logo { get; }
+    public string Name { get; }
+    public BigInteger BaseCost { get; }
+    public double BaseLps { get; }
+    public string Logo { get; }
+    [NonSerialized] public Sprite LogoSprite;
+    public bool unlocked;
 
     public Building(string name, BigInteger baseCost, string colorHex, double baseLps, string logo,
         BigInteger upgradeBaseCost)
@@ -68,7 +70,8 @@ public class Building
 
     public GameObject InstantiateGameObject(GameObject building, int index)
     {
-        var logo = Resources.Load<Sprite>(Logo);
+        if (LogoSprite == null)
+            LogoSprite = Resources.Load<Sprite>(Logo);
 
         building.GetComponent<ShopItem>().index = index;
         building.tag = "ShopItem";
@@ -88,9 +91,9 @@ public class Building
         shopBase.transform.Find("ShopItem_price").GetComponent<TextMeshProUGUI>().text =
             utilies.NumToStr(CurrentCost);
         shopBase.transform.Find("ShopItem_value").GetComponent<TextMeshProUGUI>().text = Count.ToString();
-        shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = logo;
+        shopBase.transform.Find("ShopItem_logo").GetComponent<Image>().sprite = LogoSprite;
 
-        var xScaleFactor = logo.bounds.size.x / logo.bounds.size.y / 0.942445993f;
+        var xScaleFactor = LogoSprite.bounds.size.x / LogoSprite.bounds.size.y / 0.942445993f;
         var rect = shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().rect;
         rect.width *= xScaleFactor;
         shopBase.transform.Find("ShopItem_logo").GetComponent<RectTransform>().sizeDelta =

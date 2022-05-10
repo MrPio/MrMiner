@@ -16,9 +16,10 @@ public class Store
     public bool buildingAvailable, upgradeAvailable;
 
     private string Name { get; }
-    private BigInteger BaseCost { get; }
+    public BigInteger BaseCost { get; }
     private double BaseCps { get; }
     private string Logo { get; }
+    public bool unlocked;
 
     public Store(string name, BigInteger baseCost, string colorHex, double baseCps, string logo,
         BigInteger upgradeBaseCost)

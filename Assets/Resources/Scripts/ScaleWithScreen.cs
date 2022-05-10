@@ -3,6 +3,7 @@ using UnityEngine;
 public class ScaleWithScreen : MonoBehaviour
 {
     public bool keepAspectRatio;
+    public bool keepAspectRatioOnX;
 
     private void Start()
     {
@@ -18,7 +19,9 @@ public class ScaleWithScreen : MonoBehaviour
         var scaleFactorY = worldSpaceHeight / spriteSize.y;
 
         if (keepAspectRatio)
-            if (scaleFactorX > scaleFactorY)
+            if (keepAspectRatioOnX)
+                scaleFactorY = scaleFactorX;
+            else if (scaleFactorX > scaleFactorY)
                 scaleFactorY = scaleFactorX;
             else
                 scaleFactorX = scaleFactorY;
