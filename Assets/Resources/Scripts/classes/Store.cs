@@ -11,7 +11,7 @@ public class Store
 {
     public int Version { get; private set; }
     public int Count { get; private set; }
-    private string Color { get; }
+    public string Color { get; }
     private BigInteger UpgradeBaseCost { get; }
     public bool buildingAvailable, upgradeAvailable;
 
@@ -20,9 +20,10 @@ public class Store
     private double BaseCps { get; }
     private string Logo { get; }
     public bool unlocked;
+    public string Description { get;}
 
     public Store(string name, BigInteger baseCost, string colorHex, double baseCps, string logo,
-        BigInteger upgradeBaseCost)
+        BigInteger upgradeBaseCost, string description)
     {
         Name = name;
         BaseCost = new BigInteger((double) baseCost * 2.75d);
@@ -32,6 +33,7 @@ public class Store
         Count = 0;
         Color = colorHex;
         UpgradeBaseCost = upgradeBaseCost;
+        Description = description;
     }
 
     public void Upgrade()
@@ -71,7 +73,7 @@ public class Store
         var logo = Resources.Load<Sprite>(Logo);
         var logoCoin = Resources.Load<Sprite>("Sprites/Coin_3");
 
-        building.GetComponent<ShopItem>().index = index;
+        building.GetComponent<ShopItem>().Index = index;
         building.tag = "ShopItemCoin";
         building.GetComponent<ShopItem>().shopItemType = ShopItem.ShopItemType.COIN;
 

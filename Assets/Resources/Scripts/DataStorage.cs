@@ -1,10 +1,12 @@
-﻿using TMPro;
+﻿using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class DataStorage : MonoBehaviour
 {
     public User user;
     public bool resetProgresses;
+    public bool hideFar;
     public PopulateScrollView populateScrollView;
 
     private void Start()
@@ -31,10 +33,16 @@ public class DataStorage : MonoBehaviour
 
         user.UpdateUI();
         user.UpdateBuildUI();
+        
     }
 
     private void InitializeUser()
     {
+        foreach (var building in user.buildings.Where(building => !building.unlocked))
+            building.unlocked = true;
+        foreach (var store in user.stores.Where(store => !store.unlocked))
+            store.unlocked = true;
+        
         user.ShopItemValueText = new();
         user.ShopItemPriceText = new();
         user.ShopItemCoinValueText = new();

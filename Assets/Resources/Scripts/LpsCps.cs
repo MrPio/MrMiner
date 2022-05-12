@@ -31,7 +31,6 @@ public class LpsCps : MonoBehaviour
         _newShopItemName = newShopItem.transform.Find("NewShopItem_name").GetComponent<TextMeshProUGUI>();
         _newShopItemValue = newShopItem.transform.Find("NewShopItem_value").GetComponent<TextMeshProUGUI>();
 
-
         _startTime = Time.time;
     }
 
@@ -48,8 +47,7 @@ public class LpsCps : MonoBehaviour
             {
                 _passedSecond -= 0.8f;
                 var count = 0;
-                foreach (var shopItem in _shopItemsBuilding.Where(shopItem =>
-                             dataStorage.user.buildings[count++].unlocked))
+                foreach (var shopItem in _shopItemsBuilding.Where(_ => dataStorage.user.buildings[count++].unlocked))
                 {
                     shopItem.TurnAvailability();
                     shopItem.TurnUpgradeAvailability();
@@ -62,7 +60,7 @@ public class LpsCps : MonoBehaviour
                     shopItem.TurnUpgradeAvailability();
                 }
 
-                if (!canvasAnimator.enabled)
+                if (dataStorage.hideFar && !canvasAnimator.enabled)
                 {
                     var build = dataStorage.user.CheckAndUnlockBuilding();
                     if (build != null)

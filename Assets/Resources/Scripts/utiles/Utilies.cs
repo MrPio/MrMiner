@@ -54,6 +54,8 @@ public class utilies : MonoBehaviour
 
     public static string DoubleToStr(double num)
     {
+        if (double.IsNaN(num))
+            return "0";
         return num < 1000 ? num.ToString("F1") : NumToStr(new BigInteger(num));
     }
 }

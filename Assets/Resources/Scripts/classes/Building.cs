@@ -11,7 +11,7 @@ public class Building
 {
     public int Version { get; private set; }
     public int Count { get; private set; }
-    private string Color { get; }
+    public string Color { get; }
     private BigInteger UpgradeBaseCost { get; }
     public bool buildingAvailable, upgradeAvailable;
 
@@ -21,9 +21,10 @@ public class Building
     public string Logo { get; }
     [NonSerialized] public Sprite LogoSprite;
     public bool unlocked;
+    public string Description { get; }
 
     public Building(string name, BigInteger baseCost, string colorHex, double baseLps, string logo,
-        BigInteger upgradeBaseCost)
+        BigInteger upgradeBaseCost, string description)
     {
         Name = name;
         BaseCost = baseCost;
@@ -33,6 +34,7 @@ public class Building
         Count = 0;
         Color = colorHex;
         UpgradeBaseCost = upgradeBaseCost;
+        Description = description;
     }
 
     public void Upgrade()
@@ -73,7 +75,7 @@ public class Building
         if (LogoSprite == null)
             LogoSprite = Resources.Load<Sprite>(Logo);
 
-        building.GetComponent<ShopItem>().index = index;
+        building.GetComponent<ShopItem>().Index = index;
         building.tag = "ShopItem";
         building.GetComponent<ShopItem>().shopItemType = ShopItem.ShopItemType.LOG;
 

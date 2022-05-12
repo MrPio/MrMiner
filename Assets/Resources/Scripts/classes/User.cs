@@ -22,6 +22,7 @@ public class User
     [NonSerialized] public List<TextMeshProUGUI> ShopItemValueText = new(), ShopItemPriceText = new();
     [NonSerialized] public List<TextMeshProUGUI> ShopItemCoinValueText = new(), ShopItemCoinPriceText = new();
     [NonSerialized] public List<GameObject> ShopItemBuilding = new(), ShopItemStore = new();
+    [NonSerialized] public List<Animator> ShopItemBuildingAnimators = new(), ShopItemStoreAnimators = new();
 
     private int _clickVersionLog, _clickVersionCoin;
     private int _lpsPerc, _cpsPerc;
