@@ -4763,6 +4763,10 @@ PrefabInstance:
       propertyPath: dataStorage
       value: 
       objectReference: {fileID: 910395924}
+    - target: {fileID: 2307776666633491104, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
+      propertyPath: intervalSeconds
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2307776666633491106, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
       propertyPath: m_Name
       value: DataStorage
@@ -4817,7 +4821,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
       propertyPath: hideFar
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2307776666633491111, guid: c7ae41c89f0fb0d48a39c157b1fdc41c, type: 3}
       propertyPath: resetProgresses

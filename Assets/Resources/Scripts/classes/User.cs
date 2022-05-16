@@ -84,7 +84,7 @@ public class User
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Lps * _lpsPerc)
             );
-            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            clickPower = BigInteger.Add(clickPower, new BigInteger(1000000000));
             return clickPower;
         }
     }
@@ -97,7 +97,7 @@ public class User
                 BigInteger.Pow(new BigInteger(2), _clickVersionLog),
                 new BigInteger(Cps * _cpsPerc)
             );
-            clickPower = BigInteger.Add(clickPower, new BigInteger(1000));
+            clickPower = BigInteger.Add(clickPower, new BigInteger(1000000000));
             return clickPower;
         }
     }
