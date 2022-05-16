@@ -2,7 +2,7 @@
 Idle game
 
 
-![Gameplay](https://user-images.githubusercontent.com/22773005/168623785-3234c96b-d296-4145-87a2-593cf06295ef.mp4)
+(https://user-images.githubusercontent.com/22773005/168623785-3234c96b-d296-4145-87a2-593cf06295ef.mp4
 
 ![gif (3)](https://user-images.githubusercontent.com/22773005/168623891-a0cfd0f9-6f69-42a6-b389-254d9d1b2117.gif)
 ![gif (4)](https://user-images.githubusercontent.com/22773005/168623914-065f2aa7-303d-4365-90ce-8f97ada0c522.gif)
