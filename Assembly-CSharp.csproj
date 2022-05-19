@@ -41,47 +41,48 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Resources\Scripts\LeafDrop.cs" />
      <Compile Include="Assets\Resources\Scripts\SwitchButton.cs" />
-     <Compile Include="Assets\Resources\Scripts\DataStorage.cs" />
-     <Compile Include="Assets\Resources\Scripts\CoinResources.cs" />
-     <Compile Include="Assets\Resources\Scripts\AvailabilityFade.cs" />
      <Compile Include="Assets\Resources\Scripts\ClickSpeed.cs" />
      <Compile Include="Assets\Resources\Scripts\CircleScript.cs" />
-     <Compile Include="Assets\Resources\Scripts\LogResources.cs" />
      <Compile Include="Assets\Resources\Scripts\utiles\Effect.cs" />
      <Compile Include="Assets\Resources\Scripts\databases\WoodBuildings.cs" />
      <Compile Include="Assets\Resources\Scripts\DisableAnimator.cs" />
+     <Compile Include="Assets\Resources\Scripts\InfoMode.cs" />
+     <Compile Include="Assets\Resources\Scripts\utiles\Utilies.cs" />
+     <Compile Include="Assets\Resources\Scripts\databases\CoinBuildings.cs" />
+     <Compile Include="Assets\Resources\Scripts\Autosave.cs" />
+     <Compile Include="Assets\Resources\Scripts\classes\Circle.cs" />
+     <Compile Include="Assets\Resources\Scripts\ColorFade.cs" />
+     <Compile Include="Assets\Resources\Scripts\FloatingText.cs" />
+     <Compile Include="Assets\Resources\Scripts\classes\Building.cs" />
+     <Compile Include="Assets\Resources\Scripts\Tree.cs" />
+     <Compile Include="Assets\Resources\Scripts\classes\Store.cs" />
+     <Compile Include="Assets\Resources\Scripts\LeafDrop.cs" />
+     <Compile Include="Assets\Resources\Scripts\DataStorage.cs" />
+     <Compile Include="Assets\Resources\Scripts\CoinResources.cs" />
+     <Compile Include="Assets\Resources\Scripts\AvailabilityFade.cs" />
+     <Compile Include="Assets\Resources\Scripts\LogResources.cs" />
      <Compile Include="Assets\Resources\Scripts\ShopItem.cs" />
      <Compile Include="Assets\Resources\Scripts\SellButton.cs" />
      <Compile Include="Assets\Resources\Scripts\databases\Sentences.cs" />
      <Compile Include="Assets\Resources\Scripts\MainCamera.cs" />
      <Compile Include="Assets\Resources\Scripts\LogBlink.cs" />
-     <Compile Include="Assets\Resources\Scripts\InfoMode.cs" />
-     <Compile Include="Assets\Resources\Scripts\utiles\Utilies.cs" />
-     <Compile Include="Assets\Resources\Scripts\databases\CoinBuildings.cs" />
      <Compile Include="Assets\Resources\Scripts\OverheatAnimator.cs" />
      <Compile Include="Assets\Resources\Scripts\FpsCounter.cs" />
-     <Compile Include="Assets\Resources\Scripts\Autosave.cs" />
-     <Compile Include="Assets\Resources\Scripts\classes\Circle.cs" />
      <Compile Include="Assets\Resources\Scripts\ScaleWithScreen.cs" />
      <Compile Include="Assets\Resources\Scripts\NewShopItemAnimation.cs" />
-     <Compile Include="Assets\Resources\Scripts\ColorFade.cs" />
      <Compile Include="Assets\Resources\Scripts\LpsCps.cs" />
      <Compile Include="Assets\Resources\Scripts\SwitchMode.cs" />
-     <Compile Include="Assets\Resources\Scripts\FloatingText.cs" />
      <Compile Include="Assets\Resources\Scripts\classes\User.cs" />
-     <Compile Include="Assets\Resources\Scripts\classes\Building.cs" />
      <Compile Include="Assets\Resources\Scripts\PopulateScrollView.cs" />
-     <Compile Include="Assets\Resources\Scripts\Tree.cs" />
      <Compile Include="Assets\Resources\Scripts\PriseText.cs" />
-     <Compile Include="Assets\Resources\Scripts\classes\Store.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+     <None Include="Assets\Resources\BillingMode.json" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
      <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -332,6 +333,18 @@
      <Reference Include="UnityEditor.UnityConnectModule">
      <HintPath>C:\Program Files\Unity 2021.2.1f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.Burst.Cecil.Pdb">
+     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+     </Reference>
+     <Reference Include="Newtonsoft.Json">
+     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Analytics.StandardEvents">
+     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.analytics@3.6.11\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Analytics.Editor">
+     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.analytics@3.6.11\Unity.Analytics.Editor.dll</HintPath>
+     </Reference>
      <Reference Include="System.IO.Compression.FileSystem">
      <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.connect.share@4.2.3\Plugins\System.IO.Compression.FileSystem.dll</HintPath>
      </Reference>
@@ -340,9 +353,6 @@
      </Reference>
      <Reference Include="Unity.Burst.Cecil.Mdb">
      <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
-     </Reference>
-     <Reference Include="Unity.Burst.Cecil.Pdb">
-     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Burst.Cecil">
      <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
@@ -353,8 +363,8 @@
      <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
      <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.visualscripting@1.7.2\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
      </Reference>
-     <Reference Include="Newtonsoft.Json">
-     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
+     <Reference Include="Unity.Analytics.Tracker">
+     <HintPath>C:\Users\valer\Desktop\MrMiner\Library\PackageCache\com.unity.analytics@3.6.11\Unity.Analytics.Tracker.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Android.Types">
      <HintPath>C:\Program Files\Unity 2021.2.1f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
@@ -730,6 +740,10 @@
      </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Purchasing.Common.csproj">
+      <Project>{d908b254-3be7-a470-7351-ba90664c1ce9}</Project>
+      <Name>Purchasing.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.InternalAPIEngineBridge.001.csproj">
       <Project>{c9b1b2ee-6fdc-91ae-6237-d7a7e710b5e0}</Project>
       <Name>Unity.InternalAPIEngineBridge.001</Name>
@@ -746,6 +760,10 @@
       <Project>{6aae468a-7d4a-e375-dc55-bf3cb8d1c383}</Project>
       <Name>Unity.RenderPipelines.Universal.Shaders</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEngine.Purchasing.csproj">
+      <Project>{1add13fa-78ed-8c5e-dde7-95efdc105d0e}</Project>
+      <Name>UnityEngine.Purchasing</Name>
+    </ProjectReference>
     <ProjectReference Include="PsdPlugin.csproj">
       <Project>{1248dc4b-9b46-a30c-4e88-0857926dc9a5}</Project>
       <Name>PsdPlugin</Name>
@@ -757,6 +775,14 @@
     <ProjectReference Include="Unity.VisualScripting.State.Editor.csproj">
       <Project>{55908bae-d840-be91-8364-60de38c540e0}</Project>
       <Name>Unity.VisualScripting.State.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.Purchasing.SecurityStub.csproj">
+      <Project>{adf6c339-736b-38e4-b660-fc269cec300f}</Project>
+      <Name>UnityEngine.Purchasing.SecurityStub</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.Advertisements.csproj">
+      <Project>{b6228bc9-2ad5-13c7-9349-a3a3ef6c7b5b}</Project>
+      <Name>UnityEngine.Advertisements</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Searcher.Editor.csproj">
       <Project>{01a13706-e432-1a1c-330f-d71b34e4cc40}</Project>
@@ -786,9 +812,21 @@
       <Project>{ab7aea58-6230-b83c-d670-2054299ca6d7}</Project>
       <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="Analytics.csproj">
+      <Project>{4acb43a1-29f7-b90c-bc22-ae477ad53df3}</Project>
+      <Name>Analytics</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{ddce6406-75a8-179a-f6b1-39ff85d82439}</Project>
       <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.SpatialTracking.csproj">
+      <Project>{88f3318a-f34f-cea4-6ed1-6af20c009dcb}</Project>
+      <Name>UnityEngine.SpatialTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Analytics.DataPrivacy.csproj">
+      <Project>{78346b20-d044-bca6-6ac0-b428680b7435}</Project>
+      <Name>Unity.Analytics.DataPrivacy</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.EditorCoroutines.Editor.csproj">
       <Project>{1ee87d42-f979-1654-62f9-4bb8bcc1e10d}</Project>
@@ -806,6 +844,10 @@
       <Project>{9a766ee5-2091-095c-eb37-6fba1095476f}</Project>
       <Name>Unity.ShaderGraph.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEngine.Purchasing.Codeless.csproj">
+      <Project>{d584de09-73dd-aa45-15c5-fac70418445c}</Project>
+      <Name>UnityEngine.Purchasing.Codeless</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{e9d988a1-377a-2d77-9c1d-42ddd77b8d7f}</Project>
       <Name>Unity.RenderPipeline.Universal.ShaderLibrary</Name>
@@ -813,6 +855,10 @@
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
       <Project>{d597cfcd-75e0-bd6b-0f7a-9e8c53f0419e}</Project>
       <Name>Unity.Mathematics.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.Monetization.csproj">
+      <Project>{83b43fec-86ff-f416-15d6-4d2ea3c2a877}</Project>
+      <Name>UnityEngine.Monetization</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Common.Editor.csproj">
       <Project>{510a6e21-f43a-9188-7f83-e60d93ed2072}</Project>
@@ -906,9 +952,17 @@
       <Project>{9e114b13-37ca-3a39-a128-bfb9c695d08d}</Project>
       <Name>Unity.Burst</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEngine.Purchasing.SecurityCore.csproj">
+      <Project>{ae6835b1-42ff-9040-0b7d-2e27c50095bb}</Project>
+      <Name>UnityEngine.Purchasing.SecurityCore</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Editor.csproj">
       <Project>{9037a60b-6139-e6b7-12de-f59b72c522cf}</Project>
       <Name>Unity.RenderPipelines.Universal.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
+      <Project>{5fa52cc6-eb3a-2c0b-995a-7a5dea8fb5dd}</Project>
+      <Name>UnityEngine.XR.LegacyInputHelpers</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Welcome.Editor.csproj">
       <Project>{79daae2e-0229-bc2b-afe1-eda7097d413c}</Project>
@@ -930,6 +984,14 @@
       <Project>{7ea36e86-7ac2-c456-31d6-f2caf1071f91}</Project>
       <Name>Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEngine.Purchasing.Stores.csproj">
+      <Project>{9eb299ff-0d7a-eaca-fa22-6fa9fe21129b}</Project>
+      <Name>UnityEngine.Purchasing.Stores</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj">
+      <Project>{8051d28f-47b1-6bbf-49ff-be947766c387}</Project>
+      <Name>UnityEditor.XR.LegacyInputHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.2D.Common.Runtime.csproj">
       <Project>{995fc5b4-86ce-a73d-dc9c-35a8955fbced}</Project>
       <Name>Unity.2D.Common.Runtime</Name>
@@ -937,6 +999,18 @@
     <ProjectReference Include="Unity.2D.SpriteShape.Editor.csproj">
       <Project>{b7e1c037-24a9-f37f-6b33-b351793f0023}</Project>
       <Name>Unity.2D.SpriteShape.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEditor.Purchasing.csproj">
+      <Project>{b679452a-422a-5b44-c1c1-ae7d0379786c}</Project>
+      <Name>UnityEditor.Purchasing</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEditor.SpatialTracking.csproj">
+      <Project>{70e073be-2558-0ef0-17ad-f3b25bff5a8d}</Project>
+      <Name>UnityEditor.SpatialTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.Advertisements.Editor.csproj">
+      <Project>{2766e1d8-418b-8405-d602-07e662543b6d}</Project>
+      <Name>UnityEngine.Advertisements.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
       <Project>{b2febc23-f7da-aef2-5381-dcbc09905f3d}</Project>

@@ -41,9 +41,16 @@ public class User
         buildings = new List<Building>();
         stores = new List<Store>();
         foreach (var building in WoodBuildings.Buildings)
+        {
+            building.unlocked = false;
             buildings.Add(building);
+        }
+
         foreach (var store in CoinBuildings.Stores)
+        {
+            store.unlocked = false;
             stores.Add(store);
+        }
         buildings[0].unlocked = true;
         stores[0].unlocked = true;
         _clickVersionLog = 0;
