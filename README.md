@@ -1,5 +1,6 @@
-# MrMiner
-Idle game
+# MrMiner [Idle game]
+
+### Next Upgrade: Lots of **Perks**!
 
 ![5_Cat](https://user-images.githubusercontent.com/22773005/168628965-bb462974-9573-4430-82e8-4dd1d8961390.png)
 ![6_dog](https://user-images.githubusercontent.com/22773005/168628971-10f97a63-b956-4447-a4f4-d73931a486e4.png)
